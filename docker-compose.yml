@@ -25,7 +25,6 @@ services:
       - "0.0.0.0:8001:${FLASK_PORT}"
     environment:
       LOG_LEVEL: ${LOG_LEVEL}
-      WAR_API_BASE_URLS_JSON: ${WAR_API_BASE_URLS_JSON}
       DATABASE_URL: ${DOCKER_DB_URL}
   mariadb:
     image: mariadb:10.11
