@@ -17,8 +17,8 @@ DROP TABLE IF EXISTS T_CLASS;
 -- create all tables and indexes
 CREATE TABLE `T_USER` (
   `id` integer PRIMARY KEY AUTO_INCREMENT,
-  `created_date` timestamp,
-  `modified_date` timestamp,
+  `created_date` timestamp default current_timestamp,
+  `modified_date` timestamp default current_timestamp,
   `first_name` varchar(255),
   `last_name` varchar(255),
   `login` varchar(255),
@@ -35,9 +35,10 @@ CREATE TABLE `T_USER_ROLE` (
 CREATE TABLE `T_ROLE` (
   `id` integer PRIMARY KEY AUTO_INCREMENT,
   `name` varchar(255),
-  `created_date` timestamp,
-  `modified_date` timestamp,
-  `is_active` bool
+  `created_date` timestamp default current_timestamp,
+  `modified_date` timestamp default current_timestamp,
+  `is_active` bool,
+  `is_default_user_role` bool
 );
 
 CREATE TABLE `T_ROLE_PERMISSION` (
@@ -59,8 +60,8 @@ CREATE TABLE `T_MESSAGE` (
 
 CREATE TABLE `T_CLASS` (
   `id` integer PRIMARY KEY AUTO_INCREMENT,
-  `created_date` timestamp,
-  `modified_date` timestamp,
+  `created_date` timestamp default current_timestamp,
+  `modified_date` timestamp default current_timestamp,
   `date_from` datetime,
   `date_to` datetime,
   `name` varchar(255),
@@ -74,8 +75,8 @@ CREATE TABLE `T_USER_CLASS` (
 
 CREATE TABLE `T_EXERCISE` (
   `id` integer PRIMARY KEY AUTO_INCREMENT,
-  `created_date` timestamp,
-  `modified_date` timestamp,
+  `created_date` timestamp default current_timestamp,
+  `modified_date` timestamp default current_timestamp,
   `name` varchar(255),
   `description` longtext
 );
@@ -89,8 +90,8 @@ CREATE TABLE `T_CLASS_EXERCISE` (
 CREATE TABLE `T_EXERCISE_HISTORY` (
   `id` integer PRIMARY KEY AUTO_INCREMENT,
   `class_exercise_id` integer,
-  `created_date` timestamp,
-  `modified_date` timestamp,
+  `created_date` timestamp default current_timestamp,
+  `modified_date` timestamp default current_timestamp,
   `datetime_of_class` timestamp,
   `teacher_id` integer,
   `status` varchar(255)
@@ -99,8 +100,8 @@ CREATE TABLE `T_EXERCISE_HISTORY` (
 CREATE TABLE `T_ATTENDANCE` (
   `exercise_history_id` integer,
   `user_id` integer,
-  `created_date` timestamp,
-  `modified_date` timestamp,
+  `created_date` timestamp default current_timestamp,
+  `modified_date` timestamp default current_timestamp,
   `status` varchar(255)
 );
 
@@ -108,8 +109,8 @@ CREATE TABLE `T_TODO` (
   `id` integer PRIMARY KEY AUTO_INCREMENT,
   `exercise_history_id` integer,
   `user_id` integer,
-  `created_date` timestamp,
-  `modified_date` timestamp,
+  `created_date` timestamp default current_timestamp,
+  `modified_date` timestamp default current_timestamp,
   `task_type` varchar(255),
   `title` varchar(255),
   `content` varchar(255),
@@ -120,8 +121,8 @@ CREATE TABLE `T_MARK` (
   `id` integer PRIMARY KEY AUTO_INCREMENT,
   `exercise_history_id` integer,
   `user_id` integer,
-  `created_date` timestamp,
-  `modified_date` timestamp
+  `created_date` timestamp default current_timestamp,
+  `modified_date` timestamp default current_timestamp
 );
 
 CREATE INDEX `T_USER_index_0` ON `T_USER` (`is_active`);
@@ -178,9 +179,9 @@ INSERT INTO T_PERMISSION (name) values
 ;
 
 -- insert roles ADMIN, TEACHER, STUDENT, SCHOOL_ADMIN
-INSERT INTO T_ROLE(name, created_date, modified_date, is_active) VALUES
-  ('global_admin', CURDATE(), CURDATE(), 1),
-  ('empty_user', CURDATE(), CURDATE(), 1)
+INSERT INTO T_ROLE(name, created_date, modified_date, is_active, is_default_user_role) VALUES
+  ('global_admin', CURDATE(), CURDATE(), 1, 0),
+  ('empty_user', CURDATE(), CURDATE(), 1, 1)
 ;
 
 INSERT INTO T_ROLE_PERMISSION (role_id, permission_id) VALUES
