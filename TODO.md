@@ -1,0 +1,26 @@
+# TODO
+- [ ] Managing users
+  - [ ] create user
+    - [ ] create user itself
+    - [ ] assign user a basic role
+  - [ ] deactivate users
+    - [ ] should only deactivate the user
+  - [ ] change user roles
+  - [ ] assign users to classes
+  - [ ] list users
+    - [ ] filter by activated/deactivated
+    - [ ] fitler by class
+    - [ ] filter by role
+- [ ] Managing roles
+  - [ ] create roles
+  - [ ] deactivate roles
+    - [ ] deactivating a role should remove it from users
+  - [ ] modify role permissions
+- [ ] Managing classes
+  - [ ] assigning users to classes
+    - [ ] students mainly
+- [ ] Managing years
+- [ ] Authentication system
+- [ ] Grading system
+- [ ] Messaging system
+- [ ] Attendance system
