@@ -19,12 +19,19 @@
     - [ ] deactivating a role should remove it from users
   - [ ] modify role permissions
 - [ ] Managing classes
+  - [ ] Creating class
+  - [ ] Deactivating class
+  - [ ] Changing class
   - [ ] assigning users to classes
     - [ ] students mainly
-- [ ] Managing years
+- [ ] Managing exercise
+  - [ ] create exercise
+  - [ ] update exercise
+  - [ ] delete exercise
+  - [ ] assign user to exercise
+    - [ ] users with teacher role
 - [ ] Authentication system
 - [ ] Grading system
 - [ ] Messaging system
 - [ ] Attendance system
 - [ ] Data validation
-  - [ ] for user creation
