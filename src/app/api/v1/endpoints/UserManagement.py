@@ -67,6 +67,9 @@ async def get_user(
     user_id: int,
     db: AsyncSession = Depends(get_db),
 ):
+    """
+    Not implemented
+    """
     raise HTTPException(
         status_code=501,
         detail="Endpoint not implemented.",
@@ -79,6 +82,9 @@ async def update_user_data(
     data: Dict[str, Any],
     db: AsyncSession = Depends(get_db),
 ):
+    """
+    Not implemented
+    """
     raise HTTPException(
         status_code=501,
         detail="Endpoint not implemented.",
@@ -87,6 +93,9 @@ async def update_user_data(
 
 @router.post("/add_role/{user_id}")
 async def add_role(user_id: int, role_id: int, db: AsyncSession = Depends(get_db)):
+    """
+    Not implemented
+    """
     raise HTTPException(
         status_code=501,
         detail="Endpoint not implemented.",
@@ -95,6 +104,9 @@ async def add_role(user_id: int, role_id: int, db: AsyncSession = Depends(get_db
 
 @router.post("/remove_role/{user_id}")
 async def remove_role(user_id: int, role_id: int, db: AsyncSession = Depends(get_db)):
+    """
+    Not implemented
+    """
     raise HTTPException(
         status_code=501,
         detail="Endpoint not implemented.",
