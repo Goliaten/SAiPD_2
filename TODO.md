@@ -1,7 +1,8 @@
 # TODO
 - [ ] Managing users
   - [ ] create user
-    - [ ] create user itself
+    - [x] create user itself
+    - [ ] validate the data
     - [ ] assign user a basic role
   - [ ] deactivate users
     - [ ] should only deactivate the user
@@ -24,3 +25,5 @@
 - [ ] Grading system
 - [ ] Messaging system
 - [ ] Attendance system
+- [ ] Data validation
+  - [ ] for user creation

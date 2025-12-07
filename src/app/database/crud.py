@@ -9,8 +9,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.app.database.models import (
     REV,
-    DynamicMapData,
-    DynamicMapDataItem,
     T_USER,
     T_ROLE,
     T_PERMISSION,
@@ -159,130 +157,6 @@ async def _upsert(
 
 
 # Per-model CRUD wrappers
-
-
-# DynamicMapData
-async def get_dynamic_map_data(db: AsyncSession, **filters) -> Optional[DynamicMapData]:
-    # TODO make different getter since this item has children
-    return await _get_one(db, DynamicMapData, **filters)
-
-
-async def get_dynamic_map_data_latest(
-    db: AsyncSession, **filters
-) -> Optional[DynamicMapData]:
-    data: Optional[DynamicMapData] = await _get_one_last(
-        db, model=DynamicMapData, **filters
-    )
-    if not data:
-        return None
-    data.mapItems = await _get_many(db, DynamicMapDataItem, DynamicMapData_id=data.id)
-    return data
-
-
-async def list_dynamic_map_data(
-    db: AsyncSession, skip: int = 0, limit: int = 100, **filters
-) -> List[DynamicMapData]:
-    return await _get_many(db, DynamicMapData, skip=skip, limit=limit, **filters)
-
-
-async def list_dynamic_map_data_latest(
-    db: AsyncSession, **filters
-) -> List[DynamicMapData]:
-    data: List[DynamicMapData] = await _get_many_last_by_hex_id(
-        db, DynamicMapData, **filters
-    )
-    tasks = [_get_many(db, DynamicMapDataItem, DynamicMapData_id=x.id) for x in data]
-    items = await asyncio.gather(*tasks)
-    for y, x in enumerate(data):
-        x.mapItems = items[y]
-    return data
-
-
-async def list_dynamic_map_data_REV(
-    db: AsyncSession,
-    datetime_from: datetime,
-    datetime_to: datetime,
-    skip: int = 0,
-    limit: int = 100,
-    **filters,
-) -> List[DynamicMapData]:
-    filters |= {"DATE_RANGE": [datetime_from, datetime_to]}
-
-    data = await _get_many_REV(db, DynamicMapData, skip=skip, limit=limit, **filters)
-    tasks = [_get_many(db, DynamicMapDataItem, DynamicMapData_id=x.id) for x in data]
-    items = await asyncio.gather(*tasks)
-    for y, x in enumerate(data):
-        x.mapItems = items[y]
-    return data
-
-
-async def upsert_dynamic_map_data(
-    db: AsyncSession,
-    data: Dict[str, Any],
-    key_fields: List[str] = ["id"],
-    strict_insert: bool = False,
-    strict_update: bool = False,
-) -> DynamicMapData:
-    return await _upsert(
-        db,
-        DynamicMapData,
-        key_fields=key_fields,
-        data=data,
-        strict_insert=strict_insert,
-        strict_update=strict_update,
-    )
-
-
-async def delete_dynamic_map_data(db: AsyncSession, **filters) -> int:
-    return await _delete(db, DynamicMapData, **filters)
-
-
-# DynamicMapDataItem
-async def get_dynamic_map_data_item(
-    db: AsyncSession, **filters
-) -> Optional[DynamicMapDataItem]:
-    return await _get_one(db, DynamicMapDataItem, **filters)
-
-
-async def list_dynamic_map_data_items(
-    db: AsyncSession, skip: int = 0, limit: int = 100, **filters
-) -> List[DynamicMapDataItem]:
-    return await _get_many(db, DynamicMapDataItem, skip=skip, limit=limit, **filters)
-
-
-async def list_dynamic_map_data_items_REV(
-    db: AsyncSession,
-    datetime_from: datetime,
-    datetime_to: datetime,
-    skip: int = 0,
-    limit: int = 100,
-    **filters,
-) -> List[DynamicMapDataItem]:
-    filters |= {"DATE_RANGE": [datetime_from, datetime_to]}
-    return await _get_many_REV(
-        db, DynamicMapDataItem, skip=skip, limit=limit, **filters
-    )
-
-
-async def upsert_dynamic_map_data_item(
-    db: AsyncSession,
-    data: Dict[str, Any],
-    key_fields: List[str] = ["id"],
-    strict_insert: bool = False,
-    strict_update: bool = False,
-) -> DynamicMapDataItem:
-    return await _upsert(
-        db,
-        DynamicMapDataItem,
-        key_fields=key_fields,
-        data=data,
-        strict_insert=strict_insert,
-        strict_update=strict_update,
-    )
-
-
-async def delete_dynamic_map_data_item(db: AsyncSession, **filters) -> int:
-    return await _delete(db, DynamicMapDataItem, **filters)
 
 
 # --- CRUD for T_USER ---

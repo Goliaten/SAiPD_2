@@ -54,7 +54,7 @@ app = FastAPI(
 )
 
 # Include the API router
-app.include_router(wars.router, prefix="/", tags=[])
+app.include_router(wars.router, tags=[])
 
 
 app.add_middleware(

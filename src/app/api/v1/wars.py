@@ -1,9 +1,9 @@
 from fastapi import APIRouter
 
 from src.app.api.v1.endpoints import (
-    example,
+    UserManagement,
 )
 
 router = APIRouter()
 
-router.include_router(example.router)
+router.include_router(UserManagement.router)
