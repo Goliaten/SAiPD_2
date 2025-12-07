@@ -34,6 +34,7 @@ CREATE TABLE `T_USER_ROLE` (
 
 CREATE TABLE `T_ROLE` (
   `id` integer PRIMARY KEY,
+  `name` varchar(255),
   `created_date` timestamp,
   `modified_date` timestamp,
   `is_active` bool
@@ -76,7 +77,7 @@ CREATE TABLE `T_EXERCISE` (
   `created_date` timestamp,
   `modified_date` timestamp,
   `name` varchar(255),
-  `description` varchar(255)
+  `description` longtext
 );
 
 CREATE TABLE `T_CLASS_EXERCISE` (
@@ -163,3 +164,54 @@ ALTER TABLE `T_MARK` ADD FOREIGN KEY (`user_id`) REFERENCES `T_USER` (`id`);
 ALTER TABLE `T_EXERCISE_HISTORY` ADD FOREIGN KEY (`teacher_id`) REFERENCES `T_USER` (`id`);
 
 -- insert default values
+
+INSERT INTO T_PERMISSION (name) values 
+  ('global_admin'), -- access to everything
+  ('can_manage_students'), -- can crud students (automatically assings student role)
+  ('can_manage_teachers'), -- can crud teachers (automatically assings teacher role)
+  ('can_manage_roles') -- can crud roles, assing permissions to roles, and assing them to users (does NOT include crud of permissions)
+  ('can_manage_exercise'), -- can crud exercise
+  ('can_manage_class'), -- can crud class, and add users to it (T_USER_CLASS)
+  ('can_assign_exercise_to_class'), -- can create entry in T_CLASS_EXERCISE
+  ('can_send_message'), -- can send messages to users
+  ('can_manage_exercise_history') -- managing exercise_history, attendance, todo, mark
+
+-- insert roles ADMIN, TEACHER, STUDENT, SCHOOL_ADMIN
+INSERT INTO T_ROLE(name, created_at, modified_at, is_active) VALUES
+  ('global_admin', CURDATE(), CURDATE(), 1),
+  ('empty_user', CURDATE(), CURDATE(), 1)
+
+INSERT INTO T_ROLE_PERMISSION (role_id, permission_id) VALUES
+  (1, 1),
+  (2, 8)
+
+INSERT INTO T_USER (created_date, modified_date, first_name, last_name, login, email, password, is_active) VALUES
+  (CURDATE(), CURDATE(), 'admin', 'admin', 'admin', 'admin@admin.pl', MD5('admin'), 1),
+  (CURDATE(), CURDATE(), 'example_user', 'example_user', 'user', 'user@user.pl', MD5('user'), 1),
+  (CURDATE(), CURDATE(), 'example_user2', 'example_user2', 'user2', 'user2@user.pl', MD5('user2'), 1)
+  
+INSERT INTO T_USER_ROLE (user_id, role_id) VALUES
+  (1, 1),
+  (2, 2),
+  (3, 2)
+
+INSERT INTO T_CLASS(created_date, modified_date, date_from, date_to, name, is_active) VALUES
+  (CURDATE(), CURDATE(), "2025-09-01", "2026-06-31", "example_class", 1)
+
+INSERT INTO T_USER_CLASS(user_id, class_id) VALUES
+  (2, 1)
+
+INSERT INTO T_EXERCISE(created_date, modified_date, name, description) VALUES
+  (CURDATE(), CURDATE(), "example_exercise", "Liberum Veto")
+  
+INSERT INTO T_CLASS_EXERCISE(class_id, exercise_id) VALUES
+  (1, 1)
+
+INSERT INTO T_EXERCISE_HISTORY (class_exercise_id, created_date, modified_date, datetime_of_class, teacher_id, status) VALUES
+  (1, CURDATE(), CURDATE(), CURDATE() + INTERVAL 1 WEEK, 3, 'upcoming')
+-- statusy: upcoming, finished, cancelled, not_started
+-- przy utworzeniu exercise_history, powinna się generować attendance
+
+INSERT INTO T_ATTENDANCE (exercise_history_id, user_id, created_date, modified_date, status) VALUES
+  (1, 2, CURDATE(), CURDATE(), 'upcoming')
+-- statusy obecności: upcoming, present, absent, late, not_started

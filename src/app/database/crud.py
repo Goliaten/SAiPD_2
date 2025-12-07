@@ -1,5 +1,5 @@
 import asyncio
-from datetime import datetime, timezone
+from datetime import datetime
 from typing import Any, Dict, Iterable, List, Optional, Type
 
 from sqlalchemy import delete as sa_delete, insert as sa_insert
@@ -11,6 +11,20 @@ from src.app.database.models import (
     REV,
     DynamicMapData,
     DynamicMapDataItem,
+    T_USER,
+    T_ROLE,
+    T_PERMISSION,
+    T_ROLE_PERMISSION,
+    T_USER_ROLE,
+    T_MESSAGE,
+    T_CLASS,
+    T_USER_CLASS,
+    T_EXERCISE,
+    T_CLASS_EXERCISE,
+    T_EXERCISE_HISTORY,
+    T_ATTENDANCE,
+    T_TODO,
+    T_MARK,
 )
 
 
@@ -269,3 +283,457 @@ async def upsert_dynamic_map_data_item(
 
 async def delete_dynamic_map_data_item(db: AsyncSession, **filters) -> int:
     return await _delete(db, DynamicMapDataItem, **filters)
+
+
+# --- CRUD for T_USER ---
+async def get_t_user(db: AsyncSession, **filters) -> Optional[T_USER]:
+    return await _get_one(db, T_USER, **filters)
+
+
+async def list_t_user(
+    db: AsyncSession, skip: int = 0, limit: int = 100, **filters
+) -> List[T_USER]:
+    return await _get_many(db, T_USER, skip=skip, limit=limit, **filters)
+
+
+async def upsert_t_user(
+    db: AsyncSession,
+    data: Dict[str, Any],
+    key_fields: List[str] = ["id"],
+    strict_insert: bool = False,
+    strict_update: bool = False,
+) -> T_USER:
+    return await _upsert(
+        db,
+        T_USER,
+        key_fields=key_fields,
+        data=data,
+        strict_insert=strict_insert,
+        strict_update=strict_update,
+    )
+
+
+async def delete_t_user(db: AsyncSession, **filters) -> int:
+    return await _delete(db, T_USER, **filters)
+
+
+# --- CRUD for T_ROLE ---
+async def get_t_role(db: AsyncSession, **filters) -> Optional[T_ROLE]:
+    return await _get_one(db, T_ROLE, **filters)
+
+
+async def list_t_role(
+    db: AsyncSession, skip: int = 0, limit: int = 100, **filters
+) -> List[T_ROLE]:
+    return await _get_many(db, T_ROLE, skip=skip, limit=limit, **filters)
+
+
+async def upsert_t_role(
+    db: AsyncSession,
+    data: Dict[str, Any],
+    key_fields: List[str] = ["id"],
+    strict_insert: bool = False,
+    strict_update: bool = False,
+) -> T_ROLE:
+    return await _upsert(
+        db,
+        T_ROLE,
+        key_fields=key_fields,
+        data=data,
+        strict_insert=strict_insert,
+        strict_update=strict_update,
+    )
+
+
+async def delete_t_role(db: AsyncSession, **filters) -> int:
+    return await _delete(db, T_ROLE, **filters)
+
+
+# --- CRUD for T_PERMISSION ---
+async def get_t_permission(db: AsyncSession, **filters) -> Optional[T_PERMISSION]:
+    return await _get_one(db, T_PERMISSION, **filters)
+
+
+async def list_t_permission(
+    db: AsyncSession, skip: int = 0, limit: int = 100, **filters
+) -> List[T_PERMISSION]:
+    return await _get_many(db, T_PERMISSION, skip=skip, limit=limit, **filters)
+
+
+async def upsert_t_permission(
+    db: AsyncSession,
+    data: Dict[str, Any],
+    key_fields: List[str] = ["id"],
+    strict_insert: bool = False,
+    strict_update: bool = False,
+) -> T_PERMISSION:
+    return await _upsert(
+        db,
+        T_PERMISSION,
+        key_fields=key_fields,
+        data=data,
+        strict_insert=strict_insert,
+        strict_update=strict_update,
+    )
+
+
+async def delete_t_permission(db: AsyncSession, **filters) -> int:
+    return await _delete(db, T_PERMISSION, **filters)
+
+
+# --- CRUD for T_ROLE_PERMISSION ---
+async def get_t_role_permission(
+    db: AsyncSession, **filters
+) -> Optional[T_ROLE_PERMISSION]:
+    return await _get_one(db, T_ROLE_PERMISSION, **filters)
+
+
+async def list_t_role_permission(
+    db: AsyncSession, skip: int = 0, limit: int = 100, **filters
+) -> List[T_ROLE_PERMISSION]:
+    return await _get_many(db, T_ROLE_PERMISSION, skip=skip, limit=limit, **filters)
+
+
+async def upsert_t_role_permission(
+    db: AsyncSession,
+    data: Dict[str, Any],
+    key_fields: List[str] = ["role_id", "permission_id"],
+    strict_insert: bool = False,
+    strict_update: bool = False,
+) -> T_ROLE_PERMISSION:
+    return await _upsert(
+        db,
+        T_ROLE_PERMISSION,
+        key_fields=key_fields,
+        data=data,
+        strict_insert=strict_insert,
+        strict_update=strict_update,
+    )
+
+
+async def delete_t_role_permission(db: AsyncSession, **filters) -> int:
+    return await _delete(db, T_ROLE_PERMISSION, **filters)
+
+
+# --- CRUD for T_USER_ROLE ---
+async def get_t_user_role(db: AsyncSession, **filters) -> Optional[T_USER_ROLE]:
+    return await _get_one(db, T_USER_ROLE, **filters)
+
+
+async def list_t_user_role(
+    db: AsyncSession, skip: int = 0, limit: int = 100, **filters
+) -> List[T_USER_ROLE]:
+    return await _get_many(db, T_USER_ROLE, skip=skip, limit=limit, **filters)
+
+
+async def upsert_t_user_role(
+    db: AsyncSession,
+    data: Dict[str, Any],
+    key_fields: List[str] = ["user_id", "role_id"],
+    strict_insert: bool = False,
+    strict_update: bool = False,
+) -> T_USER_ROLE:
+    return await _upsert(
+        db,
+        T_USER_ROLE,
+        key_fields=key_fields,
+        data=data,
+        strict_insert=strict_insert,
+        strict_update=strict_update,
+    )
+
+
+async def delete_t_user_role(db: AsyncSession, **filters) -> int:
+    return await _delete(db, T_USER_ROLE, **filters)
+
+
+# --- CRUD for T_MESSAGE ---
+async def get_t_message(db: AsyncSession, **filters) -> Optional[T_MESSAGE]:
+    return await _get_one(db, T_MESSAGE, **filters)
+
+
+async def list_t_message(
+    db: AsyncSession, skip: int = 0, limit: int = 100, **filters
+) -> List[T_MESSAGE]:
+    return await _get_many(db, T_MESSAGE, skip=skip, limit=limit, **filters)
+
+
+async def upsert_t_message(
+    db: AsyncSession,
+    data: Dict[str, Any],
+    key_fields: List[str] = ["id"],
+    strict_insert: bool = False,
+    strict_update: bool = False,
+) -> T_MESSAGE:
+    return await _upsert(
+        db,
+        T_MESSAGE,
+        key_fields=key_fields,
+        data=data,
+        strict_insert=strict_insert,
+        strict_update=strict_update,
+    )
+
+
+async def delete_t_message(db: AsyncSession, **filters) -> int:
+    return await _delete(db, T_MESSAGE, **filters)
+
+
+# --- CRUD for T_CLASS ---
+async def get_t_class(db: AsyncSession, **filters) -> Optional[T_CLASS]:
+    return await _get_one(db, T_CLASS, **filters)
+
+
+async def list_t_class(
+    db: AsyncSession, skip: int = 0, limit: int = 100, **filters
+) -> List[T_CLASS]:
+    return await _get_many(db, T_CLASS, skip=skip, limit=limit, **filters)
+
+
+async def upsert_t_class(
+    db: AsyncSession,
+    data: Dict[str, Any],
+    key_fields: List[str] = ["id"],
+    strict_insert: bool = False,
+    strict_update: bool = False,
+) -> T_CLASS:
+    return await _upsert(
+        db,
+        T_CLASS,
+        key_fields=key_fields,
+        data=data,
+        strict_insert=strict_insert,
+        strict_update=strict_update,
+    )
+
+
+async def delete_t_class(db: AsyncSession, **filters) -> int:
+    return await _delete(db, T_CLASS, **filters)
+
+
+# --- CRUD for T_USER_CLASS ---
+async def get_t_user_class(db: AsyncSession, **filters) -> Optional[T_USER_CLASS]:
+    return await _get_one(db, T_USER_CLASS, **filters)
+
+
+async def list_t_user_class(
+    db: AsyncSession, skip: int = 0, limit: int = 100, **filters
+) -> List[T_USER_CLASS]:
+    return await _get_many(db, T_USER_CLASS, skip=skip, limit=limit, **filters)
+
+
+async def upsert_t_user_class(
+    db: AsyncSession,
+    data: Dict[str, Any],
+    key_fields: List[str] = ["user_id", "class_id"],
+    strict_insert: bool = False,
+    strict_update: bool = False,
+) -> T_USER_CLASS:
+    return await _upsert(
+        db,
+        T_USER_CLASS,
+        key_fields=key_fields,
+        data=data,
+        strict_insert=strict_insert,
+        strict_update=strict_update,
+    )
+
+
+async def delete_t_user_class(db: AsyncSession, **filters) -> int:
+    return await _delete(db, T_USER_CLASS, **filters)
+
+
+# --- CRUD for T_EXERCISE ---
+async def get_t_exercise(db: AsyncSession, **filters) -> Optional[T_EXERCISE]:
+    return await _get_one(db, T_EXERCISE, **filters)
+
+
+async def list_t_exercise(
+    db: AsyncSession, skip: int = 0, limit: int = 100, **filters
+) -> List[T_EXERCISE]:
+    return await _get_many(db, T_EXERCISE, skip=skip, limit=limit, **filters)
+
+
+async def upsert_t_exercise(
+    db: AsyncSession,
+    data: Dict[str, Any],
+    key_fields: List[str] = ["id"],
+    strict_insert: bool = False,
+    strict_update: bool = False,
+) -> T_EXERCISE:
+    return await _upsert(
+        db,
+        T_EXERCISE,
+        key_fields=key_fields,
+        data=data,
+        strict_insert=strict_insert,
+        strict_update=strict_update,
+    )
+
+
+async def delete_t_exercise(db: AsyncSession, **filters) -> int:
+    return await _delete(db, T_EXERCISE, **filters)
+
+
+# --- CRUD for T_CLASS_EXERCISE ---
+async def get_t_class_exercise(
+    db: AsyncSession, **filters
+) -> Optional[T_CLASS_EXERCISE]:
+    return await _get_one(db, T_CLASS_EXERCISE, **filters)
+
+
+async def list_t_class_exercise(
+    db: AsyncSession, skip: int = 0, limit: int = 100, **filters
+) -> List[T_CLASS_EXERCISE]:
+    return await _get_many(db, T_CLASS_EXERCISE, skip=skip, limit=limit, **filters)
+
+
+async def upsert_t_class_exercise(
+    db: AsyncSession,
+    data: Dict[str, Any],
+    key_fields: List[str] = ["id"],
+    strict_insert: bool = False,
+    strict_update: bool = False,
+) -> T_CLASS_EXERCISE:
+    return await _upsert(
+        db,
+        T_CLASS_EXERCISE,
+        key_fields=key_fields,
+        data=data,
+        strict_insert=strict_insert,
+        strict_update=strict_update,
+    )
+
+
+async def delete_t_class_exercise(db: AsyncSession, **filters) -> int:
+    return await _delete(db, T_CLASS_EXERCISE, **filters)
+
+
+# --- CRUD for T_EXERCISE_HISTORY ---
+async def get_t_exercise_history(
+    db: AsyncSession, **filters
+) -> Optional[T_EXERCISE_HISTORY]:
+    return await _get_one(db, T_EXERCISE_HISTORY, **filters)
+
+
+async def list_t_exercise_history(
+    db: AsyncSession, skip: int = 0, limit: int = 100, **filters
+) -> List[T_EXERCISE_HISTORY]:
+    return await _get_many(db, T_EXERCISE_HISTORY, skip=skip, limit=limit, **filters)
+
+
+async def upsert_t_exercise_history(
+    db: AsyncSession,
+    data: Dict[str, Any],
+    key_fields: List[str] = ["id"],
+    strict_insert: bool = False,
+    strict_update: bool = False,
+) -> T_EXERCISE_HISTORY:
+    return await _upsert(
+        db,
+        T_EXERCISE_HISTORY,
+        key_fields=key_fields,
+        data=data,
+        strict_insert=strict_insert,
+        strict_update=strict_update,
+    )
+
+
+async def delete_t_exercise_history(db: AsyncSession, **filters) -> int:
+    return await _delete(db, T_EXERCISE_HISTORY, **filters)
+
+
+# --- CRUD for T_ATTENDANCE ---
+async def get_t_attendance(db: AsyncSession, **filters) -> Optional[T_ATTENDANCE]:
+    return await _get_one(db, T_ATTENDANCE, **filters)
+
+
+async def list_t_attendance(
+    db: AsyncSession, skip: int = 0, limit: int = 100, **filters
+) -> List[T_ATTENDANCE]:
+    return await _get_many(db, T_ATTENDANCE, skip=skip, limit=limit, **filters)
+
+
+async def upsert_t_attendance(
+    db: AsyncSession,
+    data: Dict[str, Any],
+    key_fields: List[str] = ["exercise_history_id", "user_id"],
+    strict_insert: bool = False,
+    strict_update: bool = False,
+) -> T_ATTENDANCE:
+    return await _upsert(
+        db,
+        T_ATTENDANCE,
+        key_fields=key_fields,
+        data=data,
+        strict_insert=strict_insert,
+        strict_update=strict_update,
+    )
+
+
+async def delete_t_attendance(db: AsyncSession, **filters) -> int:
+    return await _delete(db, T_ATTENDANCE, **filters)
+
+
+# --- CRUD for T_TODO ---
+async def get_t_todo(db: AsyncSession, **filters) -> Optional[T_TODO]:
+    return await _get_one(db, T_TODO, **filters)
+
+
+async def list_t_todo(
+    db: AsyncSession, skip: int = 0, limit: int = 100, **filters
+) -> List[T_TODO]:
+    return await _get_many(db, T_TODO, skip=skip, limit=limit, **filters)
+
+
+async def upsert_t_todo(
+    db: AsyncSession,
+    data: Dict[str, Any],
+    key_fields: List[str] = ["id"],
+    strict_insert: bool = False,
+    strict_update: bool = False,
+) -> T_TODO:
+    return await _upsert(
+        db,
+        T_TODO,
+        key_fields=key_fields,
+        data=data,
+        strict_insert=strict_insert,
+        strict_update=strict_update,
+    )
+
+
+async def delete_t_todo(db: AsyncSession, **filters) -> int:
+    return await _delete(db, T_TODO, **filters)
+
+
+# --- CRUD for T_MARK ---
+async def get_t_mark(db: AsyncSession, **filters) -> Optional[T_MARK]:
+    return await _get_one(db, T_MARK, **filters)
+
+
+async def list_t_mark(
+    db: AsyncSession, skip: int = 0, limit: int = 100, **filters
+) -> List[T_MARK]:
+    return await _get_many(db, T_MARK, skip=skip, limit=limit, **filters)
+
+
+async def upsert_t_mark(
+    db: AsyncSession,
+    data: Dict[str, Any],
+    key_fields: List[str] = ["id"],
+    strict_insert: bool = False,
+    strict_update: bool = False,
+) -> T_MARK:
+    return await _upsert(
+        db,
+        T_MARK,
+        key_fields=key_fields,
+        data=data,
+        strict_insert=strict_insert,
+        strict_update=strict_update,
+    )
+
+
+async def delete_t_mark(db: AsyncSession, **filters) -> int:
+    return await _delete(db, T_MARK, **filters)
