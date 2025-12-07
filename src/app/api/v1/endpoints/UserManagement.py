@@ -1,10 +1,8 @@
-from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 from src.app.schemas.User import User, InputUserData
-from src.app.database.models import T_USER
 from src.app.database import crud
 from src.app.database.session import get_db
 
