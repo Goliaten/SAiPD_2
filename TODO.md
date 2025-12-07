@@ -1,14 +1,15 @@
 # TODO
 - [ ] Managing users
-  - [ ] create user
+  - [x] create user
     - [x] create user itself
-    - [ ] validate the data
-    - [ ] assign user a basic role
+    - [x] validate the data
+    - [x] assign user a basic role
   - [ ] deactivate users
     - [ ] should only deactivate the user
   - [ ] change user roles
   - [ ] assign users to classes
   - [ ] list users
+    - [x] list everyone
     - [ ] filter by activated/deactivated
     - [ ] fitler by class
     - [ ] filter by role

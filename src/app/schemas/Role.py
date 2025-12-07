@@ -2,17 +2,11 @@ from datetime import datetime
 from pydantic import BaseModel
 
 
-class InputUserData(BaseModel):
-    first_name: str
-    last_name: str
-    login: str
-    email: str
-    password: str
-
-
-class User(InputUserData):
+class Role(BaseModel):
     id: int
+    name: str
     created_date: datetime
     modified_date: datetime
     is_active: bool
+    is_default_user_role: bool
     # TODO finish User schema

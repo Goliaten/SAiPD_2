@@ -42,6 +42,7 @@ class T_ROLE(Base):
     created_date: Mapped[DateTime] = mapped_column(DateTime, nullable=True)
     modified_date: Mapped[DateTime] = mapped_column(DateTime, nullable=True)
     is_active: Mapped[bool] = mapped_column(Boolean, nullable=True)
+    is_default_user_role: Mapped[bool] = mapped_column(Boolean, nullable=True)
 
 
 class T_PERMISSION(Base):

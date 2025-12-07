@@ -1,11 +1,8 @@
-import asyncio
-from datetime import datetime
 from typing import Any, Dict, Iterable, List, Optional, Type
 
 from sqlalchemy import delete as sa_delete, insert as sa_insert
 from sqlalchemy import select, update as sa_update
 from sqlalchemy.ext.asyncio import AsyncSession
-# sqlalchemy.orm imports not needed here
 
 from src.app.database.models import (
     REV,
@@ -26,14 +23,12 @@ from src.app.database.models import (
 )
 
 
-# Generic helpers
 async def _get_one(db: AsyncSession, model: Type[Any], **filters) -> Optional[Any]:
     stmt = select(model).filter_by(**filters)
     result = await db.execute(stmt)
     return result.scalars().first()
 
 
-# async def _get_one_last(db: AsyncSession, model: Type[Any], **filters) -> Optional[Any]:
 async def _get_one_last(db: AsyncSession, model: Type[Any], **filters) -> Optional[Any]:
     stmt = select(model).filter_by(**filters).order_by(model.REV.desc())
     result = await db.execute(stmt)
@@ -98,7 +93,9 @@ async def _get_many_REV(
 async def _delete(db: AsyncSession, model: Type[Any], **filters) -> int:
     stmt = sa_delete(model).filter_by(**filters)
     res = await db.execute(stmt)
-    await db.commit()
+    # Only commit if session is not already in an external transaction
+    if not db.in_transaction():
+        await db.commit()
     return res.rowcount if hasattr(res, "rowcount") else 0  # type: ignore
 
 
@@ -134,13 +131,15 @@ async def _upsert(
                 .where(*[getattr(model, k) == pk_filters[k] for k in pk_filters])
                 .values(**data)
             )
-            await db.commit()
+            if not db.in_transaction():
+                await db.commit()
             return await _get_one(db, model, **pk_filters)
 
         # If PK present but no existing and strict_update is False, insert
         stmt = sa_insert(model).values(**data)
         await db.execute(stmt)
-        await db.commit()
+        if not db.in_transaction():
+            await db.commit()
         return await _get_one(db, model, **pk_filters)
 
     # No PK present: perform insert (do not attempt to match by other keys)
@@ -151,7 +150,8 @@ async def _upsert(
     # Insert
     stmt = sa_insert(model).values(**data)
     await db.execute(stmt)
-    await db.commit()
+    if not db.in_transaction():
+        await db.commit()
     # Try to return by any provided key_fields if possible, otherwise return None
     return await _get_one(db, model, **{k: data[k] for k in data})
 
