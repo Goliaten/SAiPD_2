@@ -3,6 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import Any, Dict, List, Optional
 
+from src.app.schemas import User
 from src.app.database.models import T_USER
 from src.app.database import crud
 from src.app.database.session import get_db
@@ -35,9 +36,16 @@ async def add_user(
         import traceback
 
         traceback.print_exc()
-        raise e
+        raise HTTPException(status_code=500, detail=f"Server exception: {e}.")
 
     return user.id
+
+
+@router.get("/get", response_model=List[User])
+async def get_all_users(
+    skip: int = 0, limit: int = 100, db: AsyncSession = Depends(get_db)
+):
+    return await crud.list_t_user(db=db, skip=skip, limit=limit)
 
 
 @router.get("/get/{user_id}", response_model=None)
