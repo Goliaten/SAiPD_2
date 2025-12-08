@@ -3,6 +3,10 @@ from pydantic import BaseModel
 
 
 class InputUserData(BaseModel):
+    """
+    For validating user input
+    """
+
     first_name: str
     last_name: str
     login: str
@@ -11,6 +15,10 @@ class InputUserData(BaseModel):
 
 
 class User(InputUserData):
+    """
+    For validating server output
+    """
+
     id: int
     created_date: datetime
     modified_date: datetime
