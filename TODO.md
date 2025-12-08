@@ -7,6 +7,9 @@
   - [ ] deactivate users
     - [ ] should only deactivate the user
   - [ ] change user roles
+    - [ ] add role to user
+    - [ ] remove role from user
+      - [ ] also remove user from class
   - [ ] assign users to classes
   - [ ] list users
     - [x] list everyone
@@ -26,7 +29,9 @@
   - [ ] Deactivating class
   - [ ] Changing class
   - [ ] assigning users to classes
-    - [ ] students mainly
+    - [x] add user to class
+    - [ ] verify that users have student role
+  - [x] remove user from class
   - [ ] get class by id
   - [ ] list classes
     - [x] list all classes

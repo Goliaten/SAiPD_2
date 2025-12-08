@@ -49,6 +49,9 @@ async def add_class(data: InputClassData, db: AsyncSession = Depends(get_db)):
 async def list_classes(
     skip: int = 0, limit: int = 100, db: AsyncSession = Depends(get_db)
 ):
+    """
+    List all classes.
+    """
     return await crud.list_t_class(db, skip=skip, limit=limit)
 
 
@@ -74,23 +77,80 @@ async def remove_class(db: AsyncSession = Depends(get_db)):
     )
 
 
-@router.post("/add_user/{class_id}")
-async def add_user_to_class(db: AsyncSession = Depends(get_db)):
+@router.post("/add_user/{class_id}", response_model=bool)
+async def add_user_to_class(
+    class_id: str, user_id: str, db: AsyncSession = Depends(get_db)
+):
     """
-    Not implemented
+    Adds user to class.
+    Returns True if added relation. False if not inserted.
     """
-    raise HTTPException(
-        status_code=501,
-        detail="Endpoint not implemented.",
-    )
+    await db.begin()
+    # check if class exists
+    class_ = await crud.get_t_class(db, id=class_id)
+    # check if user exists
+    user = await crud.get_t_user(db, id=user_id)
+
+    if not class_:
+        raise HTTPException(
+            status_code=400, detail=f"Class with id={class_id} does not exist."
+        )
+    if not user:
+        raise HTTPException(
+            status_code=400, detail=f"User with id={user_id} does not exist."
+        )
+
+    try:
+        user_class = await crud.upsert_t_user_class(
+            db, data={"user_id": user_id, "class_id": class_id}, strict_insert=True
+        )
+        await db.commit()
+    except ValueError as e:
+        await db.rollback()
+        raise HTTPException(
+            status_code=400, detail=f"User is already in this class. <{e}>"
+        )
+
+    if not user_class:
+        return False
+    return True
 
 
-@router.post("/remove_user/{class_id}")
-async def remove_user_to_class(db: AsyncSession = Depends(get_db)):
+@router.post("/remove_user/{class_id}", response_model=bool)
+async def remove_user_from_class(
+    class_id: int, user_id: int, db: AsyncSession = Depends(get_db)
+):
     """
-    Not implemented
+    Remove user from class.
+    Returns True if entry was removed.
+    Returns False if entry wasn't removed due to not existing or failed deletion.
     """
-    raise HTTPException(
-        status_code=501,
-        detail="Endpoint not implemented.",
-    )
+    await db.begin()
+    # check if class exists
+    class_ = await crud.get_t_class(db, id=class_id)
+    # check if user exists
+    user = await crud.get_t_user(db, id=user_id)
+
+    if not class_:
+        raise HTTPException(
+            status_code=400, detail=f"Class with id={class_id} does not exist."
+        )
+    if not user:
+        raise HTTPException(
+            status_code=400, detail=f"User with id={user_id} does not exist."
+        )
+
+    try:
+        user_class = await crud.delete_t_user_class(
+            db, user_id=user_id, class_id=class_id
+        )
+        await db.commit()
+    except ValueError as e:
+        await db.rollback()
+        raise HTTPException(
+            status_code=400, detail=f"User is already in this class. <{e}>"
+        )
+
+    if not user_class:
+        return False
+    return True
