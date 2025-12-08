@@ -20,14 +20,22 @@
   - [ ] modify role permissions
 - [ ] Managing classes
   - [ ] Creating class
+    - [x] inserting class
+    - [ ] validate date range
+    - [ ] ensure that no other class with same name has the same date range
   - [ ] Deactivating class
   - [ ] Changing class
   - [ ] assigning users to classes
     - [ ] students mainly
+  - [ ] list classes
+    - [x] list all classes
+    - [ ] list classes by name
+    - [ ] list classes by date range
 - [ ] Managing exercise
   - [ ] create exercise
   - [ ] update exercise
   - [ ] delete exercise
+  - [ ] get class by id
   - [ ] assign user to exercise
     - [ ] users with teacher role
 - [ ] Authentication system
