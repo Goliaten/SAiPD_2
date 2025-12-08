@@ -1,6 +1,7 @@
+import datetime
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
-from typing import List
+from typing import List, Optional
 
 from src.app.schemas.Class import Class, InputClassData
 from src.app.database import crud
@@ -156,11 +157,31 @@ async def remove_user_from_class(
 
 @router.post("/add_exercise/{class_id}", response_model=bool, tags=["exercise"])
 async def add_exercise_to_class(
-    class_id: int, exercise_id: int, db: AsyncSession = Depends(get_db)
+    class_id: int,
+    exercise_id: int,
+    day_of_week: int,
+    time_of_exercise: datetime.time,
+    week_interval: Optional[int] = None,
+    week_offset: Optional[int] = None,
+    db: AsyncSession = Depends(get_db),
 ):
     """
     Adds exercise to class.
     Returns True if added relation. False if not inserted.
+
+    :param class_id: ID of Class
+    :type class_id: int
+    :param exercise_id: ID of Exercise
+    :type exercise_id: int
+    :param day_of_week: Day of week, that this exercise will be help for given class
+    :type day_of_week: int
+    :param time_of_exercise: At what time the exercise will be held
+    :type time_of_exercise: datetime.time
+    :param week_interval: How often this exercise should be held.
+    :type week_interval: int
+    :param week_offset: With 0, the exercise's instance will be set to begin with first available date in classes date range.
+        By offsetting, the initial instance can be offset, which will also offset subsequent instances
+    :type week_offset: int
     """
     await db.begin()
     # check if class exists
@@ -178,9 +199,21 @@ async def add_exercise_to_class(
         )
 
     try:
+        data = {
+            "exercise_id": exercise_id,
+            "class_id": class_id,
+            "day_of_week": day_of_week,
+            "time_of_exercise": time_of_exercise,
+            "week_interval": week_interval,
+            "week_offset": week_offset,
+        }
+        for key, value in data.copy().items():
+            if not value:
+                data.pop(key)
+
         exercise_class = await crud.upsert_t_class_exercise(
             db,
-            data={"exercise_id": exercise_id, "class_id": class_id},
+            data=data,
             strict_insert=True,
         )
         await db.commit()

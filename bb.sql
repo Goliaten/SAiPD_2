@@ -83,8 +83,12 @@ CREATE TABLE `T_EXERCISE` (
 
 CREATE TABLE `T_CLASS_EXERCISE` (
   `id` integer PRIMARY KEY AUTO_INCREMENT,
-  `class_id` integer,
-  `exercise_id` integer
+  `class_id` integer NOT NULL,
+  `exercise_id` integer NOT NULL,
+  `day_of_week` integer NOT NULL,
+  `time_of_exercise` time NOT NULL,
+  `week_interval` integer DEFAULT 1,
+  `week_offset` integer DEFAULT 0
 );
 
 CREATE TABLE `T_EXERCISE_HISTORY` (
@@ -213,8 +217,9 @@ INSERT INTO T_EXERCISE(created_date, modified_date, name, description) VALUES
   (CURDATE(), CURDATE(), "example_exercise", "Liberum Veto")
 ;
 
-INSERT INTO T_CLASS_EXERCISE(class_id, exercise_id) VALUES
-  (1, 1)
+INSERT INTO T_CLASS_EXERCISE(class_id, exercise_id, day_of_week, time_of_exercise) VALUES
+  (1, 1, 1, "08:00"),
+  (1, 1, 5, "12:30")
 ;
 
 INSERT INTO T_EXERCISE_HISTORY (class_exercise_id, created_date, modified_date, datetime_of_class, teacher_id, status) VALUES
