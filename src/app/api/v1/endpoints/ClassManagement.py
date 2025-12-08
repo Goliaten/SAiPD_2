@@ -238,7 +238,7 @@ async def remove_exercise_from_class(
     class_id: int, exercise_id: int, db: AsyncSession = Depends(get_db)
 ):
     """
-    Not implemented
+    Unassign exercise from class.
     """
     await db.begin()
     # check if class exists

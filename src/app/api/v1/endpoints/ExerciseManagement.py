@@ -10,9 +10,9 @@ router = APIRouter(prefix="/exercise", tags=["exercise"])
 
 
 @router.post("/add", response_model=int)
-async def add_class(data: InputExerciseData, db: AsyncSession = Depends(get_db)):
+async def add_exercise(data: InputExerciseData, db: AsyncSession = Depends(get_db)):
     """
-    Not implemented
+    Add exercise
     """
     exercise_data = data.model_dump()
     exercise_data["is_active"] = True
