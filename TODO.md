@@ -33,10 +33,16 @@
     - [ ] verify that users have student role
   - [x] remove user from class
   - [ ] get class by id
+    - [ ] show class info
+    - [ ] show users
+    - [ ] show exercises
   - [ ] list classes
     - [x] list all classes
     - [ ] list classes by name
     - [ ] list classes by date range
+  - [x] modify classes exercises
+    - [x] add exercise
+    - [x] remove exercise
 - [ ] Managing exercise
   - [x] create exercise
   - [ ] update exercise

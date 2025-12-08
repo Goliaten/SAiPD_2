@@ -145,11 +145,86 @@ async def remove_user_from_class(
             db, user_id=user_id, class_id=class_id
         )
         await db.commit()
+    except Exception as e:
+        await db.rollback()
+        raise HTTPException(status_code=500, detail=f"Server error: <{e}>")
+
+    if not user_class:
+        return False
+    return True
+
+
+@router.post("/add_exercise/{class_id}", response_model=bool)
+async def add_exercise_to_class(
+    class_id: int, exercise_id: int, db: AsyncSession = Depends(get_db)
+):
+    """
+    Adds exercise to class.
+    Returns True if added relation. False if not inserted.
+    """
+    await db.begin()
+    # check if class exists
+    class_ = await crud.get_t_class(db, id=class_id)
+    # check if user exists
+    exercise = await crud.get_t_exercise(db, id=exercise_id)
+
+    if not class_:
+        raise HTTPException(
+            status_code=400, detail=f"Class with id={class_id} does not exist."
+        )
+    if not exercise:
+        raise HTTPException(
+            status_code=400, detail=f"User with id={exercise_id} does not exist."
+        )
+
+    try:
+        exercise_class = await crud.upsert_t_class_exercise(
+            db,
+            data={"exercise_id": exercise_id, "class_id": class_id},
+            strict_insert=True,
+        )
+        await db.commit()
     except ValueError as e:
         await db.rollback()
         raise HTTPException(
             status_code=400, detail=f"User is already in this class. <{e}>"
         )
+
+    if not exercise_class:
+        return False
+    return True
+
+
+@router.post("/remove_exercise/{class_id}", response_model=bool)
+async def remove_exercise_from_class(
+    class_id: int, exercise_id: int, db: AsyncSession = Depends(get_db)
+):
+    """
+    Not implemented
+    """
+    await db.begin()
+    # check if class exists
+    class_ = await crud.get_t_class(db, id=class_id)
+    # check if user exists
+    exercise = await crud.get_t_exercise(db, id=exercise_id)
+
+    if not class_:
+        raise HTTPException(
+            status_code=400, detail=f"Class with id={class_id} does not exist."
+        )
+    if not exercise:
+        raise HTTPException(
+            status_code=400, detail=f"Exercise with id={exercise_id} does not exist."
+        )
+
+    try:
+        user_class = await crud.delete_t_class_exercise(
+            db, user_id=exercise_id, class_id=class_id
+        )
+        await db.commit()
+    except Exception as e:
+        await db.rollback()
+        raise HTTPException(status_code=500, detail=f"Server error: <{e}>")
 
     if not user_class:
         return False
