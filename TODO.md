@@ -27,17 +27,20 @@
   - [ ] Changing class
   - [ ] assigning users to classes
     - [ ] students mainly
+  - [ ] get class by id
   - [ ] list classes
     - [x] list all classes
     - [ ] list classes by name
     - [ ] list classes by date range
 - [ ] Managing exercise
-  - [ ] create exercise
+  - [x] create exercise
   - [ ] update exercise
   - [ ] delete exercise
-  - [ ] get class by id
   - [ ] assign user to exercise
     - [ ] users with teacher role
+  - [ ] list exercise
+    - [x] list all exercise
+    - [ ] filter the listed exercise
 - [ ] Authentication system
 - [ ] Grading system
 - [ ] Messaging system
