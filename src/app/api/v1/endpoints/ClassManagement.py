@@ -159,6 +159,7 @@ async def remove_user_from_class(
 async def add_exercise_to_class(
     class_id: int,
     exercise_id: int,
+    teacher_id: int,
     day_of_week: int,
     time_of_exercise: datetime.time,
     week_interval: Optional[int] = None,
@@ -173,6 +174,8 @@ async def add_exercise_to_class(
     :type class_id: int
     :param exercise_id: ID of Exercise
     :type exercise_id: int
+    :param teacher_id: ID of teacher assigned to this exercise by default
+    :type teacher_id: int
     :param day_of_week: Day of week, that this exercise will be help for given class
     :type day_of_week: int
     :param time_of_exercise: At what time the exercise will be held
@@ -202,6 +205,7 @@ async def add_exercise_to_class(
         data = {
             "exercise_id": exercise_id,
             "class_id": class_id,
+            "teacher_id": teacher_id,
             "day_of_week": day_of_week,
             "time_of_exercise": time_of_exercise,
             "week_interval": week_interval,
@@ -214,6 +218,7 @@ async def add_exercise_to_class(
         exercise_class = await crud.upsert_t_class_exercise(
             db,
             data=data,
+            key_fields=["class_id", "exercise_id"],
             strict_insert=True,
         )
         await db.commit()
