@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
-from typing import Any, Dict, List
+from typing import List
 
 from src.app.schemas.Class import Class, InputClassData
 from src.app.database import crud
