@@ -6,7 +6,7 @@ from src.app.schemas.Class import Class, InputClassData
 from src.app.database import crud
 from src.app.database.session import get_db
 
-router = APIRouter(prefix="/class")
+router = APIRouter(prefix="/class", tags=["class"])
 
 
 @router.post("/add", response_model=int)

@@ -6,7 +6,7 @@ from src.app.schemas.User import User, InputUserData
 from src.app.database import crud
 from src.app.database.session import get_db
 
-router = APIRouter(prefix="/user")
+router = APIRouter(prefix="/user", tags=["user"])
 
 
 @router.post(

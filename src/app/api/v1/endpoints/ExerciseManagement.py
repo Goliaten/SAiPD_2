@@ -6,7 +6,7 @@ from src.app.schemas import Exercise, InputExerciseData
 from src.app.database import crud
 from src.app.database.session import get_db
 
-router = APIRouter(prefix="/exercise")
+router = APIRouter(prefix="/exercise", tags=["exercise"])
 
 
 @router.post("/add", response_model=int)
