@@ -77,7 +77,7 @@ async def remove_class(db: AsyncSession = Depends(get_db)):
     )
 
 
-@router.post("/add_user/{class_id}", response_model=bool)
+@router.post("/add_user/{class_id}", response_model=bool, tags=["user"])
 async def add_user_to_class(
     class_id: str, user_id: str, db: AsyncSession = Depends(get_db)
 ):
@@ -116,7 +116,7 @@ async def add_user_to_class(
     return True
 
 
-@router.post("/remove_user/{class_id}", response_model=bool)
+@router.post("/remove_user/{class_id}", response_model=bool, tags=["user"])
 async def remove_user_from_class(
     class_id: int, user_id: int, db: AsyncSession = Depends(get_db)
 ):
@@ -154,7 +154,7 @@ async def remove_user_from_class(
     return True
 
 
-@router.post("/add_exercise/{class_id}", response_model=bool)
+@router.post("/add_exercise/{class_id}", response_model=bool, tags=["exercise"])
 async def add_exercise_to_class(
     class_id: int, exercise_id: int, db: AsyncSession = Depends(get_db)
 ):
@@ -187,7 +187,7 @@ async def add_exercise_to_class(
     except ValueError as e:
         await db.rollback()
         raise HTTPException(
-            status_code=400, detail=f"User is already in this class. <{e}>"
+            status_code=400, detail=f"Exercise is already assigned to this class. <{e}>"
         )
 
     if not exercise_class:
@@ -195,7 +195,7 @@ async def add_exercise_to_class(
     return True
 
 
-@router.post("/remove_exercise/{class_id}", response_model=bool)
+@router.post("/remove_exercise/{class_id}", response_model=bool, tags=["exercise"])
 async def remove_exercise_from_class(
     class_id: int, exercise_id: int, db: AsyncSession = Depends(get_db)
 ):
