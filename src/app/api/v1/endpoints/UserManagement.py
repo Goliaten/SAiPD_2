@@ -55,8 +55,8 @@ async def add_user(
     return user.id
 
 
-@router.get("/get", response_model=List[User])
-async def get_all_users(
+@router.get("/list", response_model=List[User])
+async def list_all_users(
     skip: int = 0, limit: int = 100, db: AsyncSession = Depends(get_db)
 ):
     return await crud.list_t_user(db=db, skip=skip, limit=limit)

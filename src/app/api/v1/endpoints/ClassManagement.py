@@ -45,7 +45,7 @@ async def add_class(data: InputClassData, db: AsyncSession = Depends(get_db)):
     return class_.id
 
 
-@router.post("/list", response_model=List[Class])
+@router.get("/list", response_model=List[Class])
 async def list_classes(
     skip: int = 0, limit: int = 100, db: AsyncSession = Depends(get_db)
 ):
