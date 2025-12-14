@@ -118,6 +118,7 @@ class T_CLASS_EXERCISE(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     class_id: Mapped[int] = mapped_column(Integer, ForeignKey("T_CLASS.id"))
     exercise_id: Mapped[int] = mapped_column(Integer, ForeignKey("T_EXERCISE.id"))
+    teacher_id: Mapped[int] = mapped_column(Integer, ForeignKey("T_USER.id"))
     day_of_week: Mapped[int] = mapped_column(Integer, nullable=False)
     time_of_exercise: Mapped[str] = mapped_column(Time, nullable=False)
     week_interval: Mapped[int] = mapped_column(Integer, server_default=text("1"))
