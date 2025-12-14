@@ -18,9 +18,19 @@
     - [x] filter by role
 - [ ] Managing roles
   - [ ] create roles
+    - [ ] should be created without any permissions
   - [ ] deactivate roles
     - [ ] deactivating a role should remove it from users
   - [ ] modify role permissions
+    - [ ] high order permissions - concerned about abstract role, and grants access to role panel on frontend
+      - [ ] teacher
+      - [ ] student
+      - [ ] administrator
+    - [ ] low order permissions - concerned about specific action
+      - [ ] can send messages
+      - [ ] can schedule tasks
+      - [ ] can modify role
+      - [ ] can modify permissions
 - [ ] Managing classes
   - [ ] Creating class
     - [x] inserting class
@@ -28,6 +38,7 @@
     - [ ] ensure that no other class with same name has the same date range
   - [ ] Deactivating class
   - [ ] Changing class
+    - [ ] as in updating it
   - [ ] assigning users to classes
     - [x] add user to class
     - [ ] verify that users have student role
@@ -52,8 +63,28 @@
   - [ ] list exercise
     - [x] list all exercise
     - [ ] filter the listed exercise
-- [ ] Authentication system
+- [ ] Managing exercise history - basically a schedule/history of future+past exercises
+  - [ ] generating all exercises that should happen for class
+  - [ ] changing status of exercise
+  - [ ] deactivating/hiding exercise
 - [ ] Grading system
+  - [ ] teachers can assign grade to user on specific exercise (from history)
 - [ ] Messaging system
+  - [ ] users can send messages to other users
 - [ ] Attendance system
+  - [ ] teacher can mark that a student was present or absent
+  - [ ] if exercise didn't happen, attendance is set to `not_happened`
+- [ ] Task system
+  - [ ] teacher can assign tasks to do for students for specific exercise (from history)
+  - [ ] students can upload what they did for that task
+  - [ ] teacher can then grade them, and mark as completed, to_redo, failed
 - [ ] Data validation
+- [ ] Front-end
+  - [ ] login screen
+  - [ ] admin panel
+  - [ ] teacher panel
+  - [ ] user/student panel
+- [ ] Authentication system
+  - [ ] log in
+  - [ ] log out
+  - [ ] logged user should only have access to his data, and to what he should be able to see based on his role
