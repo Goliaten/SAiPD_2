@@ -6,16 +6,16 @@
     - [x] assign user a basic role
   - [ ] deactivate users
     - [ ] should only deactivate the user
-  - [ ] change user roles
-    - [ ] add role to user
-    - [ ] remove role from user
+  - [x] change user roles
+    - [x] add role to user
+    - [x] remove role from user
       - [ ] also remove user from class
   - [ ] assign users to classes
-  - [ ] list users
+  - [x] list users
     - [x] list everyone
-    - [ ] filter by activated/deactivated
-    - [ ] fitler by class
-    - [ ] filter by role
+    - [x] filter by activated/deactivated
+    - [x] fitler by class
+    - [x] filter by role
 - [ ] Managing roles
   - [ ] create roles
   - [ ] deactivate roles
