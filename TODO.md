@@ -37,8 +37,8 @@
     - [x] validate date range
     - [ ] ensure that no other class with same name has the same date range
   - [x] Deactivating class
-  - [ ] Changing class
-    - [ ] as in updating it
+  - [x] Changing class
+    - [x] as in updating it
   - [x] assigning users to classes
     - [x] add user to class
     - [x] verify that users have student role

@@ -80,14 +80,51 @@ async def list_classes(
 
 
 @router.post("/update/{class_id}")
-async def update_class(db: AsyncSession = Depends(get_db)):
+async def update_class(
+    class_id: int, data: InputClassData, db: AsyncSession = Depends(get_db)
+):
     """
-    Not implemented
+    Update a class by ID.
     """
-    raise HTTPException(
-        status_code=501,
-        detail="Endpoint not implemented.",
-    )
+    await db.begin()
+    class_data = data.model_dump()
+    # basic validation: date_from must be before date_to
+    if class_data["date_from"] >= class_data["date_to"]:
+        raise HTTPException(status_code=400, detail="date_from must be before date_to")
+
+    class_data["id"] = class_id
+
+    # check for overlapping classes with same name, excluding this one
+    existing = await crud.list_t_class(db, skip=0, limit=1000, name=class_data["name"])
+    for ex in existing:
+        if ex.id != class_id:  # exclude self
+            if (
+                class_data["date_from"] <= ex.date_to
+                and class_data["date_to"] >= ex.date_from
+            ):
+                raise HTTPException(
+                    status_code=400,
+                    detail=f"Another class with the same name has overlapping date range (id={ex.id}).",
+                )
+
+    try:
+        class_ = await crud.upsert_t_class(
+            db,
+            class_data,
+            key_fields=["id"],
+            strict_update=True,
+        )
+        if not class_:
+            raise ValueError("Class not found or update failed.")
+        await db.commit()
+    except ValueError as e:
+        await db.rollback()
+        raise HTTPException(status_code=400, detail=f"Invalid data. {e}")
+    except Exception as e:
+        await db.rollback()
+        raise HTTPException(status_code=500, detail=f"Server error: {e}")
+
+    return {"message": "Class updated successfully"}
 
 
 @router.post("/remove/{class_id}")
