@@ -1,10 +1,7 @@
 import datetime
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
-from typing import List
-
 from src.app.core.typed_dicts import history_status
-from src.app.schemas import Exercise, InputExerciseData
 from src.app.database import crud
 from src.app.database.session import get_db
 
