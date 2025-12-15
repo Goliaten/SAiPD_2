@@ -231,3 +231,56 @@ async def remove_role(user_id: int, role_id: int, db: AsyncSession = Depends(get
         raise HTTPException(status_code=500, detail=f"Server error: {e}")
 
     return True if deleted else False
+
+
+async def change_user_activity_status(
+    user_id: int, status: bool, db: AsyncSession = Depends(get_db)
+):
+    """
+    Change activity status of user.
+    """
+    await db.begin()
+    try:
+        user = await crud.get_t_user(db, id=user_id)
+        if not user:
+            await db.rollback()
+            raise HTTPException(
+                status_code=404, detail=f"User with id={user_id} not found."
+            )
+        if user.is_active == status:
+            await db.rollback()
+            return False  # Already in given state
+
+        await crud.upsert_t_user(
+            db,
+            {"id": user_id, "is_active": status},
+            key_fields=["id"],
+            strict_update=True,
+        )
+
+        await db.commit()
+    except HTTPException:
+        raise
+    except Exception as e:
+        await db.rollback()
+        raise HTTPException(status_code=500, detail=f"Server error: {e}")
+
+    return True
+
+
+@router.post("/deactivate/{user_id}")
+async def deactivate_user(user_id: int, db: AsyncSession = Depends(get_db)):
+    """
+    Deactivate a user by setting is_active to False.
+    Returns True if deactivated, False if user not found or already inactive.
+    """
+    return await change_user_activity_status(user_id=user_id, status=False, db=db)
+
+
+@router.post("/activate/{user_id}")
+async def activate_user(user_id: int, db: AsyncSession = Depends(get_db)):
+    """
+    Activate a user by setting is_active to True.
+    Returns True if activated, False if user not found or already inactive.
+    """
+    return await change_user_activity_status(user_id=user_id, status=True, db=db)
