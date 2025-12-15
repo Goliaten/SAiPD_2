@@ -52,12 +52,31 @@ async def add_class(data: InputClassData, db: AsyncSession = Depends(get_db)):
 
 @router.get("/list", response_model=List[Class])
 async def list_classes(
-    skip: int = 0, limit: int = 100, db: AsyncSession = Depends(get_db)
+    skip: int = 0,
+    limit: int = 100,
+    name: Optional[str] = None,
+    date_from: Optional[datetime.datetime] = None,
+    date_to: Optional[datetime.datetime] = None,
+    db: AsyncSession = Depends(get_db),
 ):
     """
-    List all classes.
+    List classes. Optional filters: `name`, `date_from`, `date_to`.
+    Date filters will return classes that overlap the provided range if both are provided.
     """
-    return await crud.list_t_class(db, skip=skip, limit=limit)
+    # simple equality filter for name
+    if name:
+        candidates = await crud.list_t_class(db, skip=skip, limit=limit, name=name)
+    else:
+        candidates = await crud.list_t_class(db, skip=skip, limit=limit)
+
+    # filter by date range overlap if provided
+    if date_from or date_to:
+        df = date_from or datetime.datetime.min
+        dt = date_to or datetime.datetime.max
+        filtered = [c for c in candidates if c.date_from <= dt and c.date_to >= df]
+        return filtered[skip : skip + limit]
+
+    return candidates[skip : skip + limit]
 
 
 @router.post("/update/{class_id}")
