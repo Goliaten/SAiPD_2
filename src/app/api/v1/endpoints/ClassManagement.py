@@ -103,7 +103,7 @@ async def remove_class(db: AsyncSession = Depends(get_db)):
 
 @router.post("/add_user/{class_id}", response_model=bool, tags=["user"])
 async def add_user_to_class(
-    class_id: str, user_id: str, db: AsyncSession = Depends(get_db)
+    class_id: int, user_id: int, db: AsyncSession = Depends(get_db)
 ):
     """
     Adds user to class.
@@ -116,13 +116,27 @@ async def add_user_to_class(
     user = await crud.get_t_user(db, id=user_id)
 
     if not class_:
+        await db.rollback()
         raise HTTPException(
             status_code=400, detail=f"Class with id={class_id} does not exist."
         )
     if not user:
+        await db.rollback()
         raise HTTPException(
             status_code=400, detail=f"User with id={user_id} does not exist."
         )
+
+    # verify user has default user role (student) before assigning to class
+    # TODO implement this check after handling high order permissions permissions (admin,student,teacher)
+    # default_role = await crud.get_t_role(db=db, is_default_user_role=True)
+    # if default_role:
+    #     ur = await crud.get_t_user_role(db, user_id=user_id, role_id=default_role.id)
+    #     if not ur:
+    #         await db.rollback()
+    #         raise HTTPException(
+    #             status_code=400,
+    #             detail=f"User with id={user_id} does not have the default user role and cannot be assigned to a class.",
+    #         )
 
     try:
         user_class = await crud.upsert_t_user_class(
