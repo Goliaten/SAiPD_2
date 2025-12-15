@@ -17,6 +17,10 @@ async def add_class(data: InputClassData, db: AsyncSession = Depends(get_db)):
     Returns id of the Class.
     """
     class_data = data.model_dump()
+    # basic validation: date_from must be before date_to
+    if class_data["date_from"] >= class_data["date_to"]:
+        raise HTTPException(status_code=400, detail="date_from must be before date_to")
+
     class_data["is_active"] = True
     class_data["id"] = None
     await db.begin()
