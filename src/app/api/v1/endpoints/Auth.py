@@ -7,12 +7,12 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 
 
 @router.post(
-    "",
+    "/",
     response_model=int,
 )
 async def authenticate(
     login: str,
-    passwd: str,
+    password: str,
     db: AsyncSession = Depends(get_db),
 ):
     """
@@ -22,7 +22,7 @@ async def authenticate(
 
     await db.begin()
     try:
-        user = await crud.get_t_user(db, login=login, password=passwd)
+        user = await crud.get_t_user(db, login=login, password=password)
         if not user:
             raise HTTPException(status_code=400, detail="Invalid credentials.")
 
