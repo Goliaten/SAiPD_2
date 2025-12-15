@@ -192,6 +192,118 @@ async def remove_user_from_class(
     return True
 
 
+@router.get("/{class_id}")
+async def get_class_detail(class_id: int, db: AsyncSession = Depends(get_db)):
+    """
+    Get class info including assigned users and exercises.
+    """
+    class_ = await crud.get_t_class(db, id=class_id)
+    if not class_:
+        raise HTTPException(
+            status_code=404, detail=f"Class with id={class_id} not found."
+        )
+
+    # get users assigned
+    rels = await crud.list_t_user_class(db, class_id=class_id)
+    users = []
+    for r in rels:
+        u = await crud.get_t_user(db, id=r.user_id)
+        if u:
+            users.append(
+                {
+                    "id": u.id,
+                    "first_name": u.first_name,
+                    "last_name": u.last_name,
+                    "email": u.email,
+                }
+            )
+
+    # get exercises assigned
+    ex_rels = await crud.list_t_class_exercise(db, class_id=class_id)
+    exercises = []
+    for er in ex_rels:
+        ex = await crud.get_t_exercise(db, id=er.exercise_id)
+        if ex:
+            exercises.append(
+                {
+                    "id": ex.id,
+                    "name": ex.name,
+                    "day_of_week": getattr(er, "day_of_week", None),
+                    "time_of_exercise": getattr(er, "time_of_exercise", None),
+                    "week_interval": getattr(er, "week_interval", None),
+                    "week_offset": getattr(er, "week_offset", None),
+                }
+            )
+
+    return {"class": class_, "users": users, "exercises": exercises}
+
+
+@router.post("/deactivate/{class_id}")
+async def deactivate_class(class_id: int, db: AsyncSession = Depends(get_db)):
+    """
+    Deactivate a class (set is_active=False).
+    """
+    await db.begin()
+    try:
+        class_ = await crud.get_t_class(db, id=class_id)
+        if not class_:
+            await db.rollback()
+            raise HTTPException(
+                status_code=404, detail=f"Class with id={class_id} not found."
+            )
+        if not class_.is_active:
+            await db.rollback()
+            return False
+
+        await crud.upsert_t_class(
+            db,
+            {"id": class_id, "is_active": False},
+            key_fields=["id"],
+            strict_update=True,
+        )
+        await db.commit()
+    except HTTPException:
+        raise
+    except Exception as e:
+        await db.rollback()
+        raise HTTPException(status_code=500, detail=f"Server error: {e}")
+
+    return True
+
+
+@router.post("/activate/{class_id}")
+async def activate_class(class_id: int, db: AsyncSession = Depends(get_db)):
+    """
+    Activate a class (set is_active=True).
+    """
+    await db.begin()
+    try:
+        class_ = await crud.get_t_class(db, id=class_id)
+        if not class_:
+            await db.rollback()
+            raise HTTPException(
+                status_code=404, detail=f"Class with id={class_id} not found."
+            )
+        if class_.is_active:
+            await db.rollback()
+            return False
+
+        await crud.upsert_t_class(
+            db,
+            {"id": class_id, "is_active": True},
+            key_fields=["id"],
+            strict_update=True,
+        )
+        await db.commit()
+    except HTTPException:
+        raise
+    except Exception as e:
+        await db.rollback()
+        raise HTTPException(status_code=500, detail=f"Server error: {e}")
+
+    return True
+
+
 @router.post("/add_exercise/{class_id}", response_model=bool, tags=["exercise"])
 async def add_exercise_to_class(
     class_id: int,
