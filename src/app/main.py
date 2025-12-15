@@ -3,6 +3,7 @@ import logging
 from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
+from fastapi.responses import RedirectResponse
 from src.app.api.v1 import wars
 from src.app.core.config import settings
 
@@ -64,6 +65,11 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.get("/")
+async def redirect_to_docs():
+    return RedirectResponse("/docs", status_code=308)
 
 
 @app.get("/health", tags=["Health"])
