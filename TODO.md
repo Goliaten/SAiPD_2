@@ -31,38 +31,37 @@
       - [ ] can schedule tasks
       - [ ] can modify role
       - [ ] can modify permissions
-- [ ] Managing classes
-  - [ ] Creating class
+- [x] Managing classes
+  - [x] Creating class
     - [x] inserting class
-    - [ ] validate date range
+    - [x] validate date range
     - [ ] ensure that no other class with same name has the same date range
-  - [ ] Deactivating class
+  - [x] Deactivating class
   - [ ] Changing class
     - [ ] as in updating it
-  - [ ] assigning users to classes
+  - [x] assigning users to classes
     - [x] add user to class
-    - [ ] verify that users have student role
+    - [x] verify that users have student role
   - [x] remove user from class
-  - [ ] get class by id
-    - [ ] show class info
-    - [ ] show users
-    - [ ] show exercises
-  - [ ] list classes
+  - [x] get class by id
+    - [x] show class info
+    - [x] show users
+    - [x] show exercises
+  - [x] list classes
     - [x] list all classes
-    - [ ] list classes by name
-    - [ ] list classes by date range
+    - [x] list classes by name
+    - [x] list classes by date range
   - [x] modify classes exercises
     - [x] add exercise
     - [x] remove exercise
-- [ ] Managing exercise
+- [x] Managing exercise
   - [x] create exercise
-  - [ ] update exercise
-  - [ ] delete exercise
-  - [ ] assign user to exercise
-    - [ ] users with teacher role
-  - [ ] list exercise
+  - [x] update exercise
+  - ~~[ ] deactivate exercise~~
+  - ~~[ ] activate exercise~~
+  - [x] list exercise
     - [x] list all exercise
-    - [ ] filter the listed exercise
+    - [x] filter the listed exercise
 - [ ] Managing exercise history - basically a schedule/history of future+past exercises
   - [ ] generating all exercises that should happen for class
   - [ ] changing status of exercise
