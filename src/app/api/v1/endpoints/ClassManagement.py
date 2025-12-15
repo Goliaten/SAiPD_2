@@ -404,7 +404,14 @@ async def add_exercise_to_class(
         exercise_class = await crud.upsert_t_class_exercise(
             db,
             data=data,
-            key_fields=["class_id", "exercise_id"],
+            key_fields=[
+                "class_id",
+                "exercise_id",
+                "day_of_week",
+                "time_of_exercise",
+                "week_interval",
+                "week_offset",
+            ],
             strict_insert=True,
         )
         await db.commit()
