@@ -426,37 +426,32 @@ async def add_exercise_to_class(
     return True
 
 
-@router.post("/remove_exercise/{class_id}", response_model=bool, tags=["exercise"])
+@router.post(
+    "/remove_exercise/{class_exercise_id}", response_model=bool, tags=["exercise"]
+)
 async def remove_exercise_from_class(
-    class_id: int, exercise_id: int, db: AsyncSession = Depends(get_db)
+    class_exercise_id: int, db: AsyncSession = Depends(get_db)
 ):
     """
-    Unassign exercise from class.
+    Unassign exercise from class by T_CLASS_EXERCISE ID.
     """
     await db.begin()
-    # check if class exists
-    class_ = await crud.get_t_class(db, id=class_id)
-    # check if user exists
-    exercise = await crud.get_t_exercise(db, id=exercise_id)
-
-    if not class_:
+    # check if the class_exercise exists
+    class_exercise = await crud.get_t_class_exercise(db, id=class_exercise_id)
+    if not class_exercise:
+        await db.rollback()
         raise HTTPException(
-            status_code=400, detail=f"Class with id={class_id} does not exist."
-        )
-    if not exercise:
-        raise HTTPException(
-            status_code=400, detail=f"Exercise with id={exercise_id} does not exist."
+            status_code=400,
+            detail=f"T_CLASS_EXERCISE with id={class_exercise_id} does not exist.",
         )
 
     try:
-        user_class = await crud.delete_t_class_exercise(
-            db, user_id=exercise_id, class_id=class_id
-        )
+        deleted = await crud.delete_t_class_exercise(db, id=class_exercise_id)
         await db.commit()
     except Exception as e:
         await db.rollback()
         raise HTTPException(status_code=500, detail=f"Server error: <{e}>")
 
-    if not user_class:
+    if not deleted:
         return False
     return True
