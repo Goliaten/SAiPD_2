@@ -27,8 +27,10 @@ async def generate_exercise_history(class_id, db: AsyncSession = Depends(get_db)
 
     try:
         for c_exercise in class_exercises:
-            date_: datetime.datetime = class_.date_from + datetime.timedelta(
-                weeks=c_exercise.week_offset or 0
+            date_: datetime.datetime = (
+                class_.date_from
+                + datetime.timedelta(weeks=c_exercise.week_offset or 0)
+                + c_exercise.time_of_exercise
             )
             while date_.isoweekday() % 7 + 1 != c_exercise.day_of_week:
                 date_ += datetime.timedelta(days=1)
