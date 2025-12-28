@@ -46,7 +46,7 @@ async def add_exercise(data: InputExerciseData, db: AsyncSession = Depends(get_d
 async def list_exercises(
     skip: int = 0,
     limit: int = 100,
-    name: str = None,
+    name: str = "",
     db: AsyncSession = Depends(get_db),
 ):
     """
