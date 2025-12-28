@@ -85,6 +85,7 @@ CREATE TABLE `T_CLASS_EXERCISE` (
   `id` integer PRIMARY KEY AUTO_INCREMENT,
   `class_id` integer NOT NULL,
   `exercise_id` integer NOT NULL,
+  `teacher_id` integer NOT NULL,
   `day_of_week` integer NOT NULL,
   `time_of_exercise` time NOT NULL,
   `week_interval` integer DEFAULT 1,
@@ -136,6 +137,7 @@ CREATE INDEX `T_CLASS_index_3` ON `T_CLASS` (`date_to`);
 CREATE INDEX `T_EXERCISE_index_4` ON `T_EXERCISE` (`name`);
 CREATE INDEX `T_CLASS_EXERCISE_index_5` ON `T_CLASS_EXERCISE` (`class_id`);
 CREATE INDEX `T_CLASS_EXERCISE_index_6` ON `T_CLASS_EXERCISE` (`exercise_id`);
+CREATE INDEX `T_CLASS_EXERCISE_index_7` ON `T_CLASS_EXERCISE` (`teacher_id`);
 CREATE INDEX `T_EXERCISE_HISTORY_index_7` ON `T_EXERCISE_HISTORY` (`class_exercise_id`);
 CREATE INDEX `T_EXERCISE_HISTORY_index_8` ON `T_EXERCISE_HISTORY` (`teacher_id`);
 CREATE INDEX `T_EXERCISE_HISTORY_index_9` ON `T_EXERCISE_HISTORY` (`datetime_of_class`);
@@ -159,6 +161,7 @@ ALTER TABLE `T_USER_CLASS` ADD FOREIGN KEY (`user_id`) REFERENCES `T_USER` (`id`
 ALTER TABLE `T_USER_CLASS` ADD FOREIGN KEY (`class_id`) REFERENCES `T_CLASS` (`id`);
 ALTER TABLE `T_CLASS_EXERCISE` ADD FOREIGN KEY (`class_id`) REFERENCES `T_CLASS` (`id`);
 ALTER TABLE `T_CLASS_EXERCISE` ADD FOREIGN KEY (`exercise_id`) REFERENCES `T_EXERCISE` (`id`);
+ALTER TABLE `T_CLASS_EXERCISE` ADD FOREIGN KEY (`teacher_id`) REFERENCES `T_USER` (`id`);
 ALTER TABLE `T_EXERCISE_HISTORY` ADD FOREIGN KEY (`class_exercise_id`) REFERENCES `T_CLASS_EXERCISE` (`id`);
 ALTER TABLE `T_ATTENDANCE` ADD FOREIGN KEY (`exercise_history_id`) REFERENCES `T_EXERCISE_HISTORY` (`id`);
 ALTER TABLE `T_TODO` ADD FOREIGN KEY (`exercise_history_id`) REFERENCES `T_EXERCISE_HISTORY` (`id`);
@@ -171,7 +174,11 @@ ALTER TABLE `T_EXERCISE_HISTORY` ADD FOREIGN KEY (`teacher_id`) REFERENCES `T_US
 -- insert default values
 
 INSERT INTO T_PERMISSION (name) values 
+  -- high order permissions
   ('global_admin'), -- access to everything
+  ('is_teacher'), -- access to teacher stuff
+  ('is_student'), -- access to student stuff
+  -- low order permissions
   ('can_manage_students'), -- can crud students (automatically assings student role)
   ('can_manage_teachers'), -- can crud teachers (automatically assings teacher role)
   ('can_manage_roles'), -- can crud roles, assing permissions to roles, and assing them to users (does NOT include crud of permissions)
@@ -185,41 +192,50 @@ INSERT INTO T_PERMISSION (name) values
 -- insert roles ADMIN, TEACHER, STUDENT, SCHOOL_ADMIN
 INSERT INTO T_ROLE(name, created_date, modified_date, is_active, is_default_user_role) VALUES
   ('global_admin', CURDATE(), CURDATE(), 1, 0),
-  ('empty_user', CURDATE(), CURDATE(), 1, 1)
+  ('empty_user', CURDATE(), CURDATE(), 1, 1),
+  ('default_teacher', CURDATE(), CURDATE(), 1, 0),
+  ('default_student', CURDATE(), CURDATE(), 1, 0)
 ;
 
 INSERT INTO T_ROLE_PERMISSION (role_id, permission_id) VALUES
-  (1, 1),
-  (2, 8)
+  (1, 1), -- global admin
+  (2, 10), -- empty user
+  (3, 2), -- default teacher
+  (4, 3) -- default student
 ;
 
 INSERT INTO T_USER (created_date, modified_date, first_name, last_name, login, email, password, is_active) VALUES
   (CURDATE(), CURDATE(), 'admin', 'admin', 'admin', 'admin@admin.pl', MD5('admin'), 1),
   (CURDATE(), CURDATE(), 'example_user', 'example_user', 'user', 'user@user.pl', MD5('user'), 1),
-  (CURDATE(), CURDATE(), 'example_user2', 'example_user2', 'user2', 'user2@user.pl', MD5('user2'), 1)
+  (CURDATE(), CURDATE(), 'example_user2', 'example_user2', 'user2', 'user2@user.pl', MD5('user2'), 1),
+  (CURDATE(), CURDATE(), 'student', 'studentski', 'student', 'student@user.pl', MD5('student'), 1),
+  (CURDATE(), CURDATE(), 'teacher', 'teacherski', 'teacher', 'teacher@user.pl', MD5('teacher'), 1)
 ;
  
 INSERT INTO T_USER_ROLE (user_id, role_id) VALUES
   (1, 1),
   (2, 2),
-  (3, 2)
+  (3, 2),
+  (4, 4),
+  (5, 3)
 ;
 
 INSERT INTO T_CLASS(created_date, modified_date, date_from, date_to, name, is_active) VALUES
-  (CURDATE(), CURDATE(), CURDATE()-INTERVAL 1 YEAR, CURDATE()+INTERVAL 1 YEAR, "example_class", 1)
+  (CURDATE(), CURDATE(), CURDATE()-INTERVAL 1 MONTH, CURDATE()+INTERVAL 1 MONTH, "example_class", 1)
 ;
 
 INSERT INTO T_USER_CLASS(user_id, class_id) VALUES
-  (2, 1)
+  (2, 1),
+  (4, 1)
 ;
 
 INSERT INTO T_EXERCISE(created_date, modified_date, name, description) VALUES
   (CURDATE(), CURDATE(), "example_exercise", "Liberum Veto")
 ;
 
-INSERT INTO T_CLASS_EXERCISE(class_id, exercise_id, day_of_week, time_of_exercise) VALUES
-  (1, 1, 1, "08:00"),
-  (1, 1, 5, "12:30")
+INSERT INTO T_CLASS_EXERCISE(class_id, exercise_id, teacher_id, day_of_week, time_of_exercise) VALUES
+  (1, 1, 5, 1, "08:00"),
+  (1, 1, 5, 5, "12:30")
 ;
 
 INSERT INTO T_EXERCISE_HISTORY (class_exercise_id, created_date, modified_date, datetime_of_class, teacher_id, status) VALUES
