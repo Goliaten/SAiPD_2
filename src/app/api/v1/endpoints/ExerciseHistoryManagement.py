@@ -1,6 +1,8 @@
 import datetime
+from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.schemas import ExerciseHistory, InputExerciseHistoryData
 from src.app.core.typed_dicts import history_status
 from src.app.database import crud
 from src.app.database.session import get_db
@@ -62,3 +64,53 @@ async def generate_exercise_history(class_id, db: AsyncSession = Depends(get_db)
 
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Server exception: {e}.")
+
+
+@router.get("/list", response_model=List[ExerciseHistory])
+async def list_exercise_histories(
+    skip: int = 0,
+    limit: int = 100,
+    name: str = "",
+    db: AsyncSession = Depends(get_db),
+):
+    """
+    List all exercise historyies. Optional filter by name.
+    Returns list of them, if they exist.
+    """
+    raise HTTPException(status_code=501)
+    if name:
+        return await crud.list_t_exercise(db, skip=skip, limit=limit, name=name)
+    else:
+        return await crud.list_t_exercise(db, skip=skip, limit=limit)
+
+
+@router.post("/update/{exercise_history_id}", response_model=List[ExerciseHistory])
+async def update_exercise_history(
+    exercise_history_id: int,
+    data: InputExerciseHistoryData,
+    db: AsyncSession = Depends(get_db),
+):
+    """
+    Update an exercise history by ID.
+    """
+    raise HTTPException(status_code=501)
+    if name:
+        return await crud.list_t_exercise(db, skip=skip, limit=limit, name=name)
+    else:
+        return await crud.list_t_exercise(db, skip=skip, limit=limit)
+
+
+@router.get("/get/{exercise_history_id}", response_model=List[ExerciseHistory])
+async def get_exercise_history(
+    exercose_history_id: int,
+    db: AsyncSession = Depends(get_db),
+):
+    """
+    Return a single exercise history by id.
+    """
+    ex_hist = await crud.get_t_exercise_history(db, id=exercose_history_id)
+    if not ex_hist:
+        raise HTTPException(
+            status_code=404, detail=f"Data with id={exercose_history_id} not found."
+        )
+    return ex_hist
