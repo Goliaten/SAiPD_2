@@ -66,6 +66,11 @@
   - [ ] generating all exercises that should happen for class
   - [ ] changing status of exercise
   - [ ] deactivating/hiding exercise
+  - [x] list exercise history
+    - [x] basic
+    - [x] filter by class exercise id
+    - [x] filter by teacher id
+    - [x] status
 - [ ] Grading system
   - [ ] teachers can assign grade to user on specific exercise (from history)
 - [ ] Messaging system

@@ -1,5 +1,5 @@
 import datetime
-from typing import List
+from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.schemas import ExerciseHistory, InputExerciseHistoryData
@@ -70,18 +70,20 @@ async def generate_exercise_history(class_id, db: AsyncSession = Depends(get_db)
 async def list_exercise_histories(
     skip: int = 0,
     limit: int = 100,
-    name: str = "",
+    class_exercise_id: Optional[int] = None,
+    teacher_id: Optional[int] = None,
+    status: Optional[str] = None,
     db: AsyncSession = Depends(get_db),
 ):
-    """
-    List all exercise historyies. Optional filter by name.
-    Returns list of them, if they exist.
-    """
-    raise HTTPException(status_code=501)
-    if name:
-        return await crud.list_t_exercise(db, skip=skip, limit=limit, name=name)
-    else:
-        return await crud.list_t_exercise(db, skip=skip, limit=limit)
+    filters = {}
+    if class_exercise_id:
+        filters["class_exercise_id"] = class_exercise_id
+    if teacher_id:
+        filters["teacher_id"] = teacher_id
+    if status:
+        filters["status"] = status
+
+    return await crud.list_t_exercise_history(db, skip=skip, limit=limit, **filters)
 
 
 @router.post("/update/{exercise_history_id}", response_model=List[ExerciseHistory])
