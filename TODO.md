@@ -63,7 +63,7 @@
     - [x] list all exercise
     - [x] filter the listed exercise
 - [ ] Managing exercise history - basically a schedule/history of future+past exercises
-  - [ ] generating all exercises that should happen for class
+  - [x] generating all exercises that should happen for class
   - [ ] changing status of exercise
   - [ ] deactivating/hiding exercise
   - [x] list exercise history
