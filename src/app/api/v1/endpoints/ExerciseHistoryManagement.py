@@ -1,6 +1,8 @@
 import datetime
+from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
+from src.app.schemas import ExerciseHistory, InputExerciseHistoryData
 from src.app.core.typed_dicts import history_status
 from src.app.database import crud
 from src.app.database.session import get_db
@@ -8,7 +10,7 @@ from src.app.database.session import get_db
 router = APIRouter(prefix="/history", tags=["history"])
 
 
-@router.post("/generate/{class_id}", response_model=None)
+@router.post("/generate/{class_id}", response_model=bool)
 async def generate_exercise_history(class_id, db: AsyncSession = Depends(get_db)):
     await db.begin()
 
@@ -27,17 +29,32 @@ async def generate_exercise_history(class_id, db: AsyncSession = Depends(get_db)
 
     try:
         for c_exercise in class_exercises:
+            # time_of_exercise = datetime.datetime.strptime(
+            #     c_exercise.time_of_exercise, "%H:%M:%S"
+            # )
+            date_from = datetime.datetime.strptime(
+                str(class_.date_from), "%Y-%m-%d %H:%M:%S"
+            )
+            date_to = datetime.datetime.strptime(
+                str(class_.date_to), "%Y-%m-%d %H:%M:%S"
+            )
             date_: datetime.datetime = (
-                class_.date_from
+                datetime.datetime(
+                    year=date_from.year, month=date_from.month, day=date_from.day
+                )
+                # datetime.datetime(class_.date_from)
                 + datetime.timedelta(weeks=c_exercise.week_offset or 0)
-                + c_exercise.time_of_exercise
+                + datetime.timedelta(
+                    hours=c_exercise.time_of_exercise.hour,
+                    minutes=c_exercise.time_of_exercise.minute,
+                )
             )
             while date_.isoweekday() % 7 + 1 != c_exercise.day_of_week:
                 date_ += datetime.timedelta(days=1)
-                if date_ - class_.date_from > datetime.timedelta(weeks=55):
+                if date_ - date_from > datetime.timedelta(weeks=55):
                     raise OverflowError("Loop exception")
 
-            while date_ < class_.date_to:
+            while date_ < date_to:
                 data = {
                     "class_exercise_id": c_exercise.id,
                     "datetime_of_class": date_,
@@ -62,3 +79,70 @@ async def generate_exercise_history(class_id, db: AsyncSession = Depends(get_db)
 
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Server exception: {e}.")
+
+    return True
+
+
+@router.get("/list", response_model=List[ExerciseHistory])
+async def list_exercise_histories(
+    skip: int = 0,
+    limit: int = 100,
+    class_exercise_id: Optional[int] = None,
+    teacher_id: Optional[int] = None,
+    status: Optional[str] = None,
+    db: AsyncSession = Depends(get_db),
+):
+    filters = {}
+    if class_exercise_id:
+        filters["class_exercise_id"] = class_exercise_id
+    if teacher_id:
+        filters["teacher_id"] = teacher_id
+    if status:
+        filters["status"] = status
+
+    return await crud.list_t_exercise_history(db, skip=skip, limit=limit, **filters)
+
+
+@router.post("/update/{exercise_history_id}")
+async def update_exercise_history(
+    exercise_history_id: int,
+    data: InputExerciseHistoryData,
+    db: AsyncSession = Depends(get_db),
+):
+    await db.begin()
+    try:
+        exercise_history_data = data.model_dump()
+        exercise_history_data["id"] = exercise_history_id
+        exercise = await crud.upsert_t_exercise_history(
+            db,
+            exercise_history_data,
+            key_fields=["id"],
+            strict_update=True,
+        )
+        if not exercise:
+            raise ValueError("Exercise history not found or update failed.")
+        await db.commit()
+    except ValueError as e:
+        await db.rollback()
+        raise HTTPException(status_code=400, detail=f"Invalid data. {e}")
+    except Exception as e:
+        await db.rollback()
+        raise HTTPException(status_code=500, detail=f"Server error: {e}")
+
+    return {"message": "Exercise history updated successfully"}
+
+
+@router.get("/get/{exercise_history_id}", response_model=List[ExerciseHistory])
+async def get_exercise_history(
+    exercose_history_id: int,
+    db: AsyncSession = Depends(get_db),
+):
+    """
+    Return a single exercise history by id.
+    """
+    ex_hist = await crud.get_t_exercise_history(db, id=exercose_history_id)
+    if not ex_hist:
+        raise HTTPException(
+            status_code=404, detail=f"Data with id={exercose_history_id} not found."
+        )
+    return ex_hist
