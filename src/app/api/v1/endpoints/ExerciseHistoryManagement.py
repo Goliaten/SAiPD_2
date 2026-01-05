@@ -103,20 +103,33 @@ async def list_exercise_histories(
     return await crud.list_t_exercise_history(db, skip=skip, limit=limit, **filters)
 
 
-@router.post("/update/{exercise_history_id}", response_model=List[ExerciseHistory])
+@router.post("/update/{exercise_history_id}")
 async def update_exercise_history(
     exercise_history_id: int,
     data: InputExerciseHistoryData,
     db: AsyncSession = Depends(get_db),
 ):
-    """
-    Update an exercise history by ID.
-    """
-    raise HTTPException(status_code=501)
-    if name:
-        return await crud.list_t_exercise(db, skip=skip, limit=limit, name=name)
-    else:
-        return await crud.list_t_exercise(db, skip=skip, limit=limit)
+    await db.begin()
+    try:
+        exercise_history_data = data.model_dump()
+        exercise_history_data["id"] = exercise_history_id
+        exercise = await crud.upsert_t_exercise_history(
+            db,
+            exercise_history_data,
+            key_fields=["id"],
+            strict_update=True,
+        )
+        if not exercise:
+            raise ValueError("Exercise history not found or update failed.")
+        await db.commit()
+    except ValueError as e:
+        await db.rollback()
+        raise HTTPException(status_code=400, detail=f"Invalid data. {e}")
+    except Exception as e:
+        await db.rollback()
+        raise HTTPException(status_code=500, detail=f"Server error: {e}")
+
+    return {"message": "Exercise history updated successfully"}
 
 
 @router.get("/get/{exercise_history_id}", response_model=List[ExerciseHistory])
