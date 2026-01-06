@@ -55,14 +55,12 @@ async def generate_attendance_list(
     upserted = 0
     att: Any = None
     for user_id in (x.user_id for x in user_class):
-        print(user_id)
         data = {
             "exercise_history_id": exercise_history_id,
             "user_id": user_id,
             "status": attendance_status.not_happened.value,
             "modified_date": datetime.datetime.now(),
         }
-        print(data)
         if not force:
             try:
                 att = await crud.upsert_t_attendance(
@@ -72,15 +70,15 @@ async def generate_attendance_list(
                     strict_insert=True,
                 )
             except ValueError as e:
-                pass
+                logger.logger.debug(f"Caught expected insert exception. {e}")
         else:
             att = await crud.upsert_t_attendance(
                 db, data, key_fields=["exercise_history_id", "user_id"]
             )
         if att:
-            print(att.__dict__)
             upserted += 1
             att = None
+
     await db.commit()
     logger.logger.info(f"Upserted {upserted} attendance into database.")
     return upserted
