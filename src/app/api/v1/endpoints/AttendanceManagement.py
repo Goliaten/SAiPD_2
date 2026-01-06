@@ -102,3 +102,86 @@ async def list_attendance(
         filters["status"] = status
 
     return await crud.list_t_attendance(db, skip=skip, limit=limit, **filters)
+
+
+@router.get("/{exercise_history_id}/{user_id}/present", response_model=bool)
+async def set_status_present(
+    exercise_history_id: int,
+    user_id: int,
+    force: bool = False,
+    db: AsyncSession = Depends(get_db),
+):
+    return await set_status(
+        status=attendance_status.present.value,
+        exercise_history_id=exercise_history_id,
+        user_id=user_id,
+        force=force,
+        db=db,
+    )
+
+
+@router.get("/{exercise_history_id}/{user_id}/absent", response_model=bool)
+async def set_status_absent(
+    exercise_history_id: int,
+    user_id: int,
+    force: bool = False,
+    db: AsyncSession = Depends(get_db),
+):
+    return await set_status(
+        status=attendance_status.absent.value,
+        exercise_history_id=exercise_history_id,
+        user_id=user_id,
+        force=force,
+        db=db,
+    )
+
+
+@router.get("/{exercise_history_id}/{user_id}/late", response_model=bool)
+async def set_status_late(
+    exercise_history_id: int,
+    user_id: int,
+    force: bool = False,
+    db: AsyncSession = Depends(get_db),
+):
+    return await set_status(
+        status=attendance_status.late.value,
+        exercise_history_id=exercise_history_id,
+        user_id=user_id,
+        force=force,
+        db=db,
+    )
+
+
+async def set_status(
+    status: str,
+    exercise_history_id: int,
+    user_id: int,
+    force: bool = False,
+    db: AsyncSession = Depends(get_db),
+):
+    await db.begin()
+    data = {
+        "exercise_history_id": exercise_history_id,
+        "user_id": user_id,
+        "status": status,
+        "modified_date": datetime.datetime.now(),
+    }
+    if not force:
+        try:
+            att = await crud.upsert_t_attendance(
+                db,
+                data,
+                key_fields=["exercise_history_id", "user_id"],
+                strict_update=True,
+            )
+        except ValueError as e:
+            raise HTTPException(
+                status_code=404,
+                detail=f"Attendance for user not found for this exercise history. Generate it first with /generate endpoint. <{e}>",
+            )
+    else:
+        await crud.upsert_t_attendance(
+            db, data, key_fields=["exercise_history_id", "user_id"]
+        )
+    await db.commit()
+    return True

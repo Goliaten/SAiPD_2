@@ -79,13 +79,14 @@
 - [ ] Attendance system
   - [ ] teacher can mark that a student was present or absent
 ~~  - [ ] if exercise didn't happen, attendance is set to `not_happened`~~ if exercise didnt happen, no exercise list will be generated
-  - [ ] generate exercise list
-    - [ ] with default as not happened
-    - [ ] by default will create attendance for users which dont have it
-    - [ ] with force will delete and then create attendance for all users
-  - [ ] mark user present
-  - [ ] mark user absent
-  - [ ] mark user late
+  - [x] generate exercise list
+    - [x] with default as not happened
+    - [x] by default will create attendance for users which dont have it
+~~    - [ ] with force will delete and then create attendance for all users~~
+    - [ ] with force will overwrite present rows
+  - [x] mark user present
+  - [x] mark user absent
+  - [x] mark user late
 - [ ] Task system
   - [ ] teacher can assign tasks to do for students for specific exercise (from history)
   - [ ] students can upload what they did for that task
