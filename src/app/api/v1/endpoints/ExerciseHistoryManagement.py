@@ -3,7 +3,7 @@ from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from src.app.schemas import ExerciseHistory, InputExerciseHistoryData
-from src.app.core.typed_dicts import history_status
+from app.core.enums import history_status
 from src.app.database import crud
 from src.app.database.session import get_db
 
