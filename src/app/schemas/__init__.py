@@ -3,6 +3,7 @@ from .Role import Role  # noqa: F401
 from .User import User, InputUserData  # noqa: F401
 from .Exercise import Exercise, InputExerciseData  # noqa: F401
 from .ExerciseHistory import ExerciseHistory, InputExerciseHistoryData  # noqa: F401
+from .Attendance import Attendance, InputAttendanceData
 
 # import glob
 # from importlib import import_module
