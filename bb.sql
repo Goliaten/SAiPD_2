@@ -250,3 +250,182 @@ INSERT INTO T_EXERCISE_HISTORY (class_exercise_id, created_date, modified_date, 
 INSERT INTO T_ATTENDANCE (exercise_history_id, user_id, created_date, modified_date, status) VALUES
   (1, 2, CURDATE(), CURDATE(), 'upcoming')
 ;
+
+-- Additional example data for comprehensive testing
+
+-- Additional users (more students and teachers)
+INSERT INTO T_USER (created_date, modified_date, first_name, last_name, login, email, password, is_active) VALUES
+  (CURDATE(), CURDATE(), 'Anna', 'Kowalski', 'anna_k', 'anna.kowalski@school.pl', MD5('pass123'), 1),
+  (CURDATE(), CURDATE(), 'Bartek', 'Lewandowski', 'bartek_l', 'bartek.lewandowski@school.pl', MD5('pass123'), 1),
+  (CURDATE(), CURDATE(), 'Celina', 'Nowak', 'celina_n', 'celina.nowak@school.pl', MD5('pass123'), 1),
+  (CURDATE(), CURDATE(), 'Dominik', 'Zielinski', 'dominik_z', 'dominik.zielinski@school.pl', MD5('pass123'), 1),
+  (CURDATE(), CURDATE(), 'Ewa', 'Michalska', 'ewa_m', 'ewa.michalska@school.pl', MD5('pass123'), 1),
+  (CURDATE(), CURDATE(), 'Filip', 'Gajda', 'filip_g', 'filip.gajda@school.pl', MD5('pass123'), 1),
+  (CURDATE(), CURDATE(), 'Grażyna', 'Wolska', 'grazyna_w', 'grazyna.wolska@school.pl', MD5('teacher_pass'), 1),
+  (CURDATE(), CURDATE(), 'Henryk', 'Piotrowski', 'henryk_p', 'henryk.piotrowski@school.pl', MD5('teacher_pass'), 1),
+  (CURDATE(), CURDATE(), 'Irena', 'Szymczak', 'irena_s', 'irena.szymczak@school.pl', MD5('teacher_pass'), 1)
+;
+
+-- Assign new users to roles (students and teachers)
+INSERT INTO T_USER_ROLE (user_id, role_id) VALUES
+  (6, 4),   -- Anna - student
+  (7, 4),   -- Bartek - student
+  (8, 4),   -- Celina - student
+  (9, 4),   -- Dominik - student
+  (10, 4),  -- Ewa - student
+  (11, 4),  -- Filip - student
+  (12, 3),  -- Grażyna - teacher
+  (13, 3),  -- Henryk - teacher
+  (14, 3)   -- Irena - teacher
+;
+
+-- Additional classes
+INSERT INTO T_CLASS(created_date, modified_date, date_from, date_to, name, is_active) VALUES
+  (CURDATE(), CURDATE(), CURDATE()-INTERVAL 2 MONTH, CURDATE()+INTERVAL 2 MONTH, 'Mathematics 101', 1),
+  (CURDATE(), CURDATE(), CURDATE()-INTERVAL 1 MONTH, CURDATE()+INTERVAL 1 MONTH, 'Physics 201', 1),
+  (CURDATE(), CURDATE(), CURDATE()-INTERVAL 3 MONTH, CURDATE()+INTERVAL 3 MONTH, 'Chemistry Lab', 1),
+  (CURDATE(), CURDATE(), CURDATE()-INTERVAL 1 WEEK, CURDATE()+INTERVAL 2 WEEK, 'Advanced Programming', 1)
+;
+
+-- Assign students to classes
+INSERT INTO T_USER_CLASS(user_id, class_id) VALUES
+  (2, 1),   -- example_user - example_class
+  (4, 1),   -- student - example_class
+  (6, 2),   -- Anna - Mathematics 101
+  (7, 2),   -- Bartek - Mathematics 101
+  (8, 2),   -- Celina - Mathematics 101
+  (6, 3),   -- Anna - Physics 201
+  (9, 3),   -- Dominik - Physics 201
+  (10, 3),  -- Ewa - Physics 201
+  (11, 4),  -- Filip - Advanced Programming
+  (7, 4),   -- Bartek - Advanced Programming
+  (8, 4)    -- Celina - Advanced Programming
+;
+
+-- Additional exercises
+INSERT INTO T_EXERCISE(created_date, modified_date, name, description) VALUES
+  (CURDATE(), CURDATE(), 'Algebra Practice', 'Basic algebra problems and equations'),
+  (CURDATE(), CURDATE(), 'Calculus Problems', 'Integration and differentiation exercises'),
+  (CURDATE(), CURDATE(), 'Physics Experiments', 'Laboratory experiments with data collection'),
+  (CURDATE(), CURDATE(), 'Circuit Analysis', 'Electronic circuit analysis and design'),
+  (CURDATE(), CURDATE(), 'Code Review', 'Review and refactor existing code'),
+  (CURDATE(), CURDATE(), 'Algorithm Challenge', 'Implement and optimize sorting algorithms')
+;
+
+-- Assign exercises to classes with teachers
+INSERT INTO T_CLASS_EXERCISE(class_id, exercise_id, teacher_id, day_of_week, time_of_exercise) VALUES
+  (2, 2, 5, 2, "10:00"),    -- Mathematics 101: Algebra, teacher 5 (teacher), Monday 10:00
+  (2, 3, 5, 4, "14:00"),    -- Mathematics 101: Calculus, teacher 5, Wednesday 14:00
+  (3, 4, 12, 1, "09:00"),   -- Physics 201: Physics Experiments, teacher 12 (Grażyna), Monday 09:00
+  (3, 5, 12, 3, "11:00"),   -- Physics 201: Circuit Analysis, teacher 12, Tuesday 11:00
+  (4, 6, 13, 2, "15:00"),   -- Advanced Programming: Code Review, teacher 13 (Henryk), Monday 15:00
+  (4, 7, 13, 5, "16:00")    -- Advanced Programming: Algorithm Challenge, teacher 13, Thursday 16:00
+;
+
+-- Generate more exercise history records
+INSERT INTO T_EXERCISE_HISTORY (class_exercise_id, created_date, modified_date, datetime_of_class, teacher_id, status) VALUES
+  (2, CURDATE(), CURDATE(), CURDATE() + INTERVAL 1 DAY, 5, 'upcoming'),
+  (2, CURDATE(), CURDATE(), CURDATE() + INTERVAL 8 DAY, 5, 'upcoming'),
+  (3, CURDATE(), CURDATE(), CURDATE() + INTERVAL 2 DAY, 5, 'upcoming'),
+  (4, CURDATE(), CURDATE(), CURDATE() - INTERVAL 5 DAY, 12, 'finished'),
+  (4, CURDATE(), CURDATE(), CURDATE() + INTERVAL 2 DAY, 12, 'upcoming'),
+  (5, CURDATE(), CURDATE(), CURDATE() - INTERVAL 3 DAY, 12, 'finished'),
+  (5, CURDATE(), CURDATE(), CURDATE() + INTERVAL 4 DAY, 12, 'upcoming'),
+  (6, CURDATE(), CURDATE(), CURDATE() - INTERVAL 1 DAY, 13, 'finished'),
+  (6, CURDATE(), CURDATE(), CURDATE() + INTERVAL 6 DAY, 13, 'upcoming'),
+  (7, CURDATE(), CURDATE(), CURDATE() - INTERVAL 2 DAY, 13, 'finished'),
+  (7, CURDATE(), CURDATE(), CURDATE() + INTERVAL 5 DAY, 13, 'upcoming')
+;
+
+-- Generate attendance for historical and upcoming exercises
+INSERT INTO T_ATTENDANCE (exercise_history_id, user_id, created_date, modified_date, status) VALUES
+  -- Exercise history 1 (upcoming)
+  (1, 6, CURDATE(), CURDATE(), 'upcoming'),
+  (1, 7, CURDATE(), CURDATE(), 'upcoming'),
+  (1, 8, CURDATE(), CURDATE(), 'upcoming'),
+  -- Exercise history 2 (upcoming)
+  (2, 6, CURDATE(), CURDATE(), 'upcoming'),
+  (2, 7, CURDATE(), CURDATE(), 'upcoming'),
+  (2, 8, CURDATE(), CURDATE(), 'upcoming'),
+  -- Exercise history 3 (upcoming)
+  (3, 6, CURDATE(), CURDATE(), 'upcoming'),
+  (3, 9, CURDATE(), CURDATE(), 'upcoming'),
+  (3, 10, CURDATE(), CURDATE(), 'upcoming'),
+  -- Exercise history 4 (finished - past)
+  (4, 6, CURDATE()-INTERVAL 5 DAY, CURDATE()-INTERVAL 5 DAY, 'present'),
+  (4, 9, CURDATE()-INTERVAL 5 DAY, CURDATE()-INTERVAL 5 DAY, 'present'),
+  (4, 10, CURDATE()-INTERVAL 5 DAY, CURDATE()-INTERVAL 5 DAY, 'absent'),
+  -- Exercise history 5 (upcoming)
+  (5, 6, CURDATE(), CURDATE(), 'upcoming'),
+  (5, 9, CURDATE(), CURDATE(), 'upcoming'),
+  (5, 10, CURDATE(), CURDATE(), 'upcoming'),
+  -- Exercise history 6 (finished - past)
+  (6, 6, CURDATE()-INTERVAL 3 DAY, CURDATE()-INTERVAL 3 DAY, 'present'),
+  (6, 9, CURDATE()-INTERVAL 3 DAY, CURDATE()-INTERVAL 3 DAY, 'late'),
+  (6, 10, CURDATE()-INTERVAL 3 DAY, CURDATE()-INTERVAL 3 DAY, 'present'),
+  -- Exercise history 7 (upcoming)
+  (7, 6, CURDATE(), CURDATE(), 'upcoming'),
+  (7, 9, CURDATE(), CURDATE(), 'upcoming'),
+  (7, 10, CURDATE(), CURDATE(), 'upcoming'),
+  -- Exercise history 8 (finished - past)
+  (8, 11, CURDATE()-INTERVAL 1 DAY, CURDATE()-INTERVAL 1 DAY, 'present'),
+  (8, 7, CURDATE()-INTERVAL 1 DAY, CURDATE()-INTERVAL 1 DAY, 'present'),
+  (8, 8, CURDATE()-INTERVAL 1 DAY, CURDATE()-INTERVAL 1 DAY, 'present'),
+  -- Exercise history 9 (upcoming)
+  (9, 11, CURDATE(), CURDATE(), 'upcoming'),
+  (9, 7, CURDATE(), CURDATE(), 'upcoming'),
+  (9, 8, CURDATE(), CURDATE(), 'upcoming'),
+  -- Exercise history 10 (finished - past)
+  (10, 11, CURDATE()-INTERVAL 2 DAY, CURDATE()-INTERVAL 2 DAY, 'present'),
+  (10, 7, CURDATE()-INTERVAL 2 DAY, CURDATE()-INTERVAL 2 DAY, 'absent'),
+  (10, 8, CURDATE()-INTERVAL 2 DAY, CURDATE()-INTERVAL 2 DAY, 'late'),
+  -- Exercise history 11 (upcoming)
+  (11, 11, CURDATE(), CURDATE(), 'upcoming'),
+  (11, 7, CURDATE(), CURDATE(), 'upcoming'),
+  (11, 8, CURDATE(), CURDATE(), 'upcoming')
+;
+
+-- Add marks/grades for completed exercises
+INSERT INTO T_MARK (exercise_history_id, user_id, created_date, modified_date, grade) VALUES
+  (4, 6, CURDATE()-INTERVAL 5 DAY, CURDATE()-INTERVAL 5 DAY, 'A'),
+  (4, 9, CURDATE()-INTERVAL 5 DAY, CURDATE()-INTERVAL 5 DAY, 'B+'),
+  (4, 10, CURDATE()-INTERVAL 5 DAY, CURDATE()-INTERVAL 5 DAY, 'C'),
+  (6, 6, CURDATE()-INTERVAL 3 DAY, CURDATE()-INTERVAL 3 DAY, 'A-'),
+  (6, 9, CURDATE()-INTERVAL 3 DAY, CURDATE()-INTERVAL 3 DAY, 'A'),
+  (6, 10, CURDATE()-INTERVAL 3 DAY, CURDATE()-INTERVAL 3 DAY, 'B'),
+  (8, 11, CURDATE()-INTERVAL 1 DAY, CURDATE()-INTERVAL 1 DAY, 'A'),
+  (8, 7, CURDATE()-INTERVAL 1 DAY, CURDATE()-INTERVAL 1 DAY, 'B+'),
+  (8, 8, CURDATE()-INTERVAL 1 DAY, CURDATE()-INTERVAL 1 DAY, 'A-'),
+  (10, 11, CURDATE()-INTERVAL 2 DAY, CURDATE()-INTERVAL 2 DAY, 'B'),
+  (10, 7, CURDATE()-INTERVAL 2 DAY, CURDATE()-INTERVAL 2 DAY, 'C+'),
+  (10, 8, CURDATE()-INTERVAL 2 DAY, CURDATE()-INTERVAL 2 DAY, 'B-')
+;
+
+-- Add tasks/todos for students
+INSERT INTO T_TODO (exercise_history_id, user_id, created_date, modified_date, task_type, title, content, status) VALUES
+  (4, 6, CURDATE()-INTERVAL 5 DAY, CURDATE()-INTERVAL 3 DAY, 'homework', 'Solve Problem Set 1', 'Complete problems 1-10 from Chapter 2', 'completed'),
+  (4, 9, CURDATE()-INTERVAL 5 DAY, CURDATE()-INTERVAL 4 DAY, 'homework', 'Solve Problem Set 1', 'Complete problems 1-10 from Chapter 2', 'completed'),
+  (4, 10, CURDATE()-INTERVAL 5 DAY, CURDATE(), 'homework', 'Solve Problem Set 1', 'Complete problems 1-10 from Chapter 2', 'in_progress'),
+  (5, 6, CURDATE(), CURDATE(), 'assignment', 'Research Project', 'Write a 5-page report on calculus applications', 'pending'),
+  (5, 9, CURDATE(), CURDATE(), 'assignment', 'Research Project', 'Write a 5-page report on calculus applications', 'pending'),
+  (5, 10, CURDATE(), CURDATE(), 'assignment', 'Research Project', 'Write a 5-page report on calculus applications', 'pending'),
+  (6, 6, CURDATE()-INTERVAL 1 DAY, CURDATE()-INTERVAL 1 DAY, 'lab', 'Lab Report', 'Document experimental results and analysis', 'completed'),
+  (6, 9, CURDATE()-INTERVAL 1 DAY, CURDATE()-INTERVAL 1 DAY, 'lab', 'Lab Report', 'Document experimental results and analysis', 'completed'),
+  (7, 6, CURDATE(), CURDATE(), 'quiz', 'Circuit Quiz', 'Complete online quiz on basic circuits', 'pending'),
+  (7, 9, CURDATE(), CURDATE(), 'quiz', 'Circuit Quiz', 'Complete online quiz on basic circuits', 'pending'),
+  (9, 11, CURDATE(), CURDATE(), 'assignment', 'Code Implementation', 'Implement binary search algorithm', 'pending'),
+  (9, 7, CURDATE(), CURDATE(), 'assignment', 'Code Implementation', 'Implement binary search algorithm', 'pending'),
+  (9, 8, CURDATE(), CURDATE(), 'assignment', 'Code Implementation', 'Implement binary search algorithm', 'pending')
+;
+
+-- Add sample messages between users
+INSERT INTO T_MESSAGE (user_id, sender_id, created_date, modified_date, title, content) VALUES
+  (6, 5, CURDATE()-INTERVAL 2 DAY, CURDATE()-INTERVAL 2 DAY, 'Grades Posted', 'Your latest grades have been posted on the system.'),
+  (9, 5, CURDATE()-INTERVAL 2 DAY, CURDATE()-INTERVAL 2 DAY, 'Grades Posted', 'Your latest grades have been posted on the system.'),
+  (11, 13, CURDATE()-INTERVAL 1 DAY, CURDATE()-INTERVAL 1 DAY, 'Assignment Question', 'I have a question about problem 5 in the homework.'),
+  (13, 11, CURDATE(), CURDATE(), 'RE: Assignment Question', 'Please check chapter 3, section 2 for a similar example.'),
+  (7, 6, CURDATE()-INTERVAL 3 DAY, CURDATE()-INTERVAL 3 DAY, 'Study Group', 'Want to form a study group for the upcoming exam?'),
+  (4, 2, CURDATE()-INTERVAL 1 DAY, CURDATE()-INTERVAL 1 DAY, 'Class Reminder', 'Remember to submit your lab report by Friday.'),
+  (8, 7, CURDATE(), CURDATE(), 'Project Collaboration', 'Should we work together on the research project?'),
+  (12, 6, CURDATE(), CURDATE(), 'Attendance Issue', 'I noticed you were absent last class. Is everything okay?')
+;
