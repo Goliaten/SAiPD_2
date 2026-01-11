@@ -128,7 +128,7 @@ CREATE TABLE `T_MARK` (
   `exercise_history_id` integer,
   `user_id` integer,
   `created_date` timestamp default current_timestamp,
-  `modified_date` timestamp default current_timestamp
+  `modified_date` timestamp default current_timestamp,
   `grade` varchar(20) default NULL
 );
 
