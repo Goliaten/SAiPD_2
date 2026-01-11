@@ -1,4 +1,3 @@
-import datetime
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List, Optional
@@ -35,7 +34,7 @@ async def list_grades(
     user_id: Optional[int] = None,
     teacher_id: Optional[int] = None,
     db: AsyncSession = Depends(get_db),
-) -> List[Mark]:
+):
     try:
         # basic filters supported by T_MARK table
         filters = {}

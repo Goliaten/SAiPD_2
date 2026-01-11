@@ -53,7 +53,8 @@ CREATE TABLE `T_PERMISSION` (
 
 CREATE TABLE `T_MESSAGE` (
   `id` integer PRIMARY KEY AUTO_INCREMENT,
-  `user_id` integer,
+  `user_id` integer NOT NULL,
+  `sender_id` integer NOT NULL,
   `title` varchar(255),
   `content` varchar(255)
 );
