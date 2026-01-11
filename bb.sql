@@ -337,69 +337,69 @@ INSERT INTO T_EXERCISE_HISTORY (class_exercise_id, created_date, modified_date, 
   (7, CURDATE(), CURDATE(), CURDATE() + INTERVAL 5 DAY, 13, 'upcoming')
 ;
 
--- Generate attendance for historical and upcoming exercises
-INSERT INTO T_ATTENDANCE (exercise_history_id, user_id, created_date, modified_date, status) VALUES
-  -- Exercise history 1 (upcoming)
-  (1, 6, CURDATE(), CURDATE(), 'upcoming'),
-  (1, 7, CURDATE(), CURDATE(), 'upcoming'),
-  (1, 8, CURDATE(), CURDATE(), 'upcoming'),
-  -- Exercise history 2 (upcoming)
-  (2, 6, CURDATE(), CURDATE(), 'upcoming'),
-  (2, 7, CURDATE(), CURDATE(), 'upcoming'),
-  (2, 8, CURDATE(), CURDATE(), 'upcoming'),
-  -- Exercise history 3 (upcoming)
-  (3, 6, CURDATE(), CURDATE(), 'upcoming'),
-  (3, 9, CURDATE(), CURDATE(), 'upcoming'),
-  (3, 10, CURDATE(), CURDATE(), 'upcoming'),
-  -- Exercise history 4 (finished - past)
-  (4, 6, CURDATE()-INTERVAL 5 DAY, CURDATE()-INTERVAL 5 DAY, 'present'),
-  (4, 9, CURDATE()-INTERVAL 5 DAY, CURDATE()-INTERVAL 5 DAY, 'present'),
-  (4, 10, CURDATE()-INTERVAL 5 DAY, CURDATE()-INTERVAL 5 DAY, 'absent'),
-  -- Exercise history 5 (upcoming)
-  (5, 6, CURDATE(), CURDATE(), 'upcoming'),
-  (5, 9, CURDATE(), CURDATE(), 'upcoming'),
-  (5, 10, CURDATE(), CURDATE(), 'upcoming'),
-  -- Exercise history 6 (finished - past)
-  (6, 6, CURDATE()-INTERVAL 3 DAY, CURDATE()-INTERVAL 3 DAY, 'present'),
-  (6, 9, CURDATE()-INTERVAL 3 DAY, CURDATE()-INTERVAL 3 DAY, 'late'),
-  (6, 10, CURDATE()-INTERVAL 3 DAY, CURDATE()-INTERVAL 3 DAY, 'present'),
-  -- Exercise history 7 (upcoming)
-  (7, 6, CURDATE(), CURDATE(), 'upcoming'),
-  (7, 9, CURDATE(), CURDATE(), 'upcoming'),
-  (7, 10, CURDATE(), CURDATE(), 'upcoming'),
-  -- Exercise history 8 (finished - past)
-  (8, 11, CURDATE()-INTERVAL 1 DAY, CURDATE()-INTERVAL 1 DAY, 'present'),
-  (8, 7, CURDATE()-INTERVAL 1 DAY, CURDATE()-INTERVAL 1 DAY, 'present'),
-  (8, 8, CURDATE()-INTERVAL 1 DAY, CURDATE()-INTERVAL 1 DAY, 'present'),
-  -- Exercise history 9 (upcoming)
-  (9, 11, CURDATE(), CURDATE(), 'upcoming'),
-  (9, 7, CURDATE(), CURDATE(), 'upcoming'),
-  (9, 8, CURDATE(), CURDATE(), 'upcoming'),
-  -- Exercise history 10 (finished - past)
-  (10, 11, CURDATE()-INTERVAL 2 DAY, CURDATE()-INTERVAL 2 DAY, 'present'),
-  (10, 7, CURDATE()-INTERVAL 2 DAY, CURDATE()-INTERVAL 2 DAY, 'absent'),
-  (10, 8, CURDATE()-INTERVAL 2 DAY, CURDATE()-INTERVAL 2 DAY, 'late'),
-  -- Exercise history 11 (upcoming)
-  (11, 11, CURDATE(), CURDATE(), 'upcoming'),
-  (11, 7, CURDATE(), CURDATE(), 'upcoming'),
-  (11, 8, CURDATE(), CURDATE(), 'upcoming')
-;
+-- -- Generate attendance for historical and upcoming exercises
+-- INSERT INTO T_ATTENDANCE (exercise_history_id, user_id, created_date, modified_date, status) VALUES
+--   -- Exercise history 1 (upcoming)
+--   (1, 6, CURDATE(), CURDATE(), 'upcoming'),
+--   (1, 7, CURDATE(), CURDATE(), 'upcoming'),
+--   (1, 8, CURDATE(), CURDATE(), 'upcoming'),
+--   -- Exercise history 2 (upcoming)
+--   (2, 6, CURDATE(), CURDATE(), 'upcoming'),
+--   (2, 7, CURDATE(), CURDATE(), 'upcoming'),
+--   (2, 8, CURDATE(), CURDATE(), 'upcoming'),
+--   -- Exercise history 3 (upcoming)
+--   (3, 6, CURDATE(), CURDATE(), 'upcoming'),
+--   (3, 9, CURDATE(), CURDATE(), 'upcoming'),
+--   (3, 10, CURDATE(), CURDATE(), 'upcoming'),
+--   -- Exercise history 4 (finished - past)
+--   (4, 6, CURDATE()-INTERVAL 5 DAY, CURDATE()-INTERVAL 5 DAY, 'present'),
+--   (4, 9, CURDATE()-INTERVAL 5 DAY, CURDATE()-INTERVAL 5 DAY, 'present'),
+--   (4, 10, CURDATE()-INTERVAL 5 DAY, CURDATE()-INTERVAL 5 DAY, 'absent'),
+--   -- Exercise history 5 (upcoming)
+--   (5, 6, CURDATE(), CURDATE(), 'upcoming'),
+--   (5, 9, CURDATE(), CURDATE(), 'upcoming'),
+--   (5, 10, CURDATE(), CURDATE(), 'upcoming'),
+--   -- Exercise history 6 (finished - past)
+--   (6, 6, CURDATE()-INTERVAL 3 DAY, CURDATE()-INTERVAL 3 DAY, 'present'),
+--   (6, 9, CURDATE()-INTERVAL 3 DAY, CURDATE()-INTERVAL 3 DAY, 'late'),
+--   (6, 10, CURDATE()-INTERVAL 3 DAY, CURDATE()-INTERVAL 3 DAY, 'present'),
+--   -- Exercise history 7 (upcoming)
+--   (7, 6, CURDATE(), CURDATE(), 'upcoming'),
+--   (7, 9, CURDATE(), CURDATE(), 'upcoming'),
+--   (7, 10, CURDATE(), CURDATE(), 'upcoming'),
+--   -- Exercise history 8 (finished - past)
+--   (8, 11, CURDATE()-INTERVAL 1 DAY, CURDATE()-INTERVAL 1 DAY, 'present'),
+--   (8, 7, CURDATE()-INTERVAL 1 DAY, CURDATE()-INTERVAL 1 DAY, 'present'),
+--   (8, 8, CURDATE()-INTERVAL 1 DAY, CURDATE()-INTERVAL 1 DAY, 'present'),
+--   -- Exercise history 9 (upcoming)
+--   (9, 11, CURDATE(), CURDATE(), 'upcoming'),
+--   (9, 7, CURDATE(), CURDATE(), 'upcoming'),
+--   (9, 8, CURDATE(), CURDATE(), 'upcoming'),
+--   -- Exercise history 10 (finished - past)
+--   (10, 11, CURDATE()-INTERVAL 2 DAY, CURDATE()-INTERVAL 2 DAY, 'present'),
+--   (10, 7, CURDATE()-INTERVAL 2 DAY, CURDATE()-INTERVAL 2 DAY, 'absent'),
+--   (10, 8, CURDATE()-INTERVAL 2 DAY, CURDATE()-INTERVAL 2 DAY, 'late'),
+--   -- Exercise history 11 (upcoming)
+--   (11, 11, CURDATE(), CURDATE(), 'upcoming'),
+--   (11, 7, CURDATE(), CURDATE(), 'upcoming'),
+--   (11, 8, CURDATE(), CURDATE(), 'upcoming')
+-- ;
 
--- Add marks/grades for completed exercises
-INSERT INTO T_MARK (exercise_history_id, user_id, created_date, modified_date, grade) VALUES
-  (4, 6, CURDATE()-INTERVAL 5 DAY, CURDATE()-INTERVAL 5 DAY, 'A'),
-  (4, 9, CURDATE()-INTERVAL 5 DAY, CURDATE()-INTERVAL 5 DAY, 'B+'),
-  (4, 10, CURDATE()-INTERVAL 5 DAY, CURDATE()-INTERVAL 5 DAY, 'C'),
-  (6, 6, CURDATE()-INTERVAL 3 DAY, CURDATE()-INTERVAL 3 DAY, 'A-'),
-  (6, 9, CURDATE()-INTERVAL 3 DAY, CURDATE()-INTERVAL 3 DAY, 'A'),
-  (6, 10, CURDATE()-INTERVAL 3 DAY, CURDATE()-INTERVAL 3 DAY, 'B'),
-  (8, 11, CURDATE()-INTERVAL 1 DAY, CURDATE()-INTERVAL 1 DAY, 'A'),
-  (8, 7, CURDATE()-INTERVAL 1 DAY, CURDATE()-INTERVAL 1 DAY, 'B+'),
-  (8, 8, CURDATE()-INTERVAL 1 DAY, CURDATE()-INTERVAL 1 DAY, 'A-'),
-  (10, 11, CURDATE()-INTERVAL 2 DAY, CURDATE()-INTERVAL 2 DAY, 'B'),
-  (10, 7, CURDATE()-INTERVAL 2 DAY, CURDATE()-INTERVAL 2 DAY, 'C+'),
-  (10, 8, CURDATE()-INTERVAL 2 DAY, CURDATE()-INTERVAL 2 DAY, 'B-')
-;
+-- -- Add marks/grades for completed exercises
+-- INSERT INTO T_MARK (exercise_history_id, user_id, created_date, modified_date, grade) VALUES
+--   (4, 6, CURDATE()-INTERVAL 5 DAY, CURDATE()-INTERVAL 5 DAY, 'A'),
+--   (4, 9, CURDATE()-INTERVAL 5 DAY, CURDATE()-INTERVAL 5 DAY, 'B+'),
+--   (4, 10, CURDATE()-INTERVAL 5 DAY, CURDATE()-INTERVAL 5 DAY, 'C'),
+--   (6, 6, CURDATE()-INTERVAL 3 DAY, CURDATE()-INTERVAL 3 DAY, 'A-'),
+--   (6, 9, CURDATE()-INTERVAL 3 DAY, CURDATE()-INTERVAL 3 DAY, 'A'),
+--   (6, 10, CURDATE()-INTERVAL 3 DAY, CURDATE()-INTERVAL 3 DAY, 'B'),
+--   (8, 11, CURDATE()-INTERVAL 1 DAY, CURDATE()-INTERVAL 1 DAY, 'A'),
+--   (8, 7, CURDATE()-INTERVAL 1 DAY, CURDATE()-INTERVAL 1 DAY, 'B+'),
+--   (8, 8, CURDATE()-INTERVAL 1 DAY, CURDATE()-INTERVAL 1 DAY, 'A-'),
+--   (10, 11, CURDATE()-INTERVAL 2 DAY, CURDATE()-INTERVAL 2 DAY, 'B'),
+--   (10, 7, CURDATE()-INTERVAL 2 DAY, CURDATE()-INTERVAL 2 DAY, 'C+'),
+--   (10, 8, CURDATE()-INTERVAL 2 DAY, CURDATE()-INTERVAL 2 DAY, 'B-')
+-- ;
 
 -- Add tasks/todos for students
 INSERT INTO T_TODO (exercise_history_id, user_id, created_date, modified_date, task_type, title, content, status) VALUES
