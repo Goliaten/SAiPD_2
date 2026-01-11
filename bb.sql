@@ -419,13 +419,13 @@ INSERT INTO T_TODO (exercise_history_id, user_id, created_date, modified_date, t
 ;
 
 -- Add sample messages between users
-INSERT INTO T_MESSAGE (user_id, sender_id, created_date, modified_date, title, content) VALUES
-  (6, 5, CURDATE()-INTERVAL 2 DAY, CURDATE()-INTERVAL 2 DAY, 'Grades Posted', 'Your latest grades have been posted on the system.'),
-  (9, 5, CURDATE()-INTERVAL 2 DAY, CURDATE()-INTERVAL 2 DAY, 'Grades Posted', 'Your latest grades have been posted on the system.'),
-  (11, 13, CURDATE()-INTERVAL 1 DAY, CURDATE()-INTERVAL 1 DAY, 'Assignment Question', 'I have a question about problem 5 in the homework.'),
-  (13, 11, CURDATE(), CURDATE(), 'RE: Assignment Question', 'Please check chapter 3, section 2 for a similar example.'),
-  (7, 6, CURDATE()-INTERVAL 3 DAY, CURDATE()-INTERVAL 3 DAY, 'Study Group', 'Want to form a study group for the upcoming exam?'),
-  (4, 2, CURDATE()-INTERVAL 1 DAY, CURDATE()-INTERVAL 1 DAY, 'Class Reminder', 'Remember to submit your lab report by Friday.'),
-  (8, 7, CURDATE(), CURDATE(), 'Project Collaboration', 'Should we work together on the research project?'),
-  (12, 6, CURDATE(), CURDATE(), 'Attendance Issue', 'I noticed you were absent last class. Is everything okay?')
+INSERT INTO T_MESSAGE (user_id, sender_id, title, content) VALUES
+  (6, 5, 'Grades Posted', 'Your latest grades have been posted on the system.'),
+  (9, 5, 'Grades Posted', 'Your latest grades have been posted on the system.'),
+  (11, 13, 'Assignment Question', 'I have a question about problem 5 in the homework.'),
+  (13, 11, 'RE: Assignment Question', 'Please check chapter 3, section 2 for a similar example.'),
+  (7, 6, 'Study Group', 'Want to form a study group for the upcoming exam?'),
+  (4, 2, 'Class Reminder', 'Remember to submit your lab report by Friday.'),
+  (8, 7, 'Project Collaboration', 'Should we work together on the research project?'),
+  (12, 6, 'Attendance Issue', 'I noticed you were absent last class. Is everything okay?')
 ;
