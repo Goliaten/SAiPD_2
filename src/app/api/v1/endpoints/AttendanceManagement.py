@@ -168,7 +168,7 @@ async def set_status(
     }
     if not force:
         try:
-            att = await crud.upsert_t_attendance(
+            await crud.upsert_t_attendance(
                 db,
                 data,
                 key_fields=["exercise_history_id", "user_id"],
