@@ -128,6 +128,7 @@ CREATE TABLE `T_MARK` (
   `user_id` integer,
   `created_date` timestamp default current_timestamp,
   `modified_date` timestamp default current_timestamp
+  `grade` varchar(20) default NULL
 );
 
 CREATE INDEX `T_USER_index_0` ON `T_USER` (`is_active`);

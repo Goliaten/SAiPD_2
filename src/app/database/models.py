@@ -182,3 +182,4 @@ class T_MARK(Base):
     )
     created_date: Mapped[DateTime] = mapped_column(DateTime, nullable=True)
     modified_date: Mapped[DateTime] = mapped_column(DateTime, nullable=True)
+    grade: Mapped[str] = mapped_column(String(20), nullable=True)

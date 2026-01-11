@@ -73,7 +73,13 @@
     - [x] filter by teacher id
     - [x] status
 - [ ] Grading system
-  - [ ] teachers can assign grade to user on specific exercise (from history)
+  - [ ] teachers can assign grade to user on specific exercise (from exercise_history)
+  - [ ] create grade for user
+  - [ ] modify grade for user
+  - [ ] list grades
+    - [ ] optional filter exercise_id
+    - [ ] optional filter user_id
+    - [ ] optional filter teacher_id (teacher_id is in exercise_history, not in T_MARK)
 - [ ] Messaging system
   - [ ] users can send messages to other users
 - [ ] Attendance system
